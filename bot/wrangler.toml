@@ -1,0 +1,19 @@
+name = "sourcing-bot"
+main = "src/index.ts"
+compatibility_date = "2026-07-12"
+
+[vars]
+GITHUB_OWNER = "NOROOVIRUZ"
+GITHUB_REPO = "sourcing-bot"
+DATA_PATH = "docs/data.json"
+CATEGORIES_PATH = "data/categories.json"
+# doc-review와 동일한 AI Gateway 재사용 (Gemini 직통은 CF 엣지 지역차단됨)
+CF_ACCOUNT_ID = "48270de429136aa3f2f559277aa8a8d6"
+AI_GATEWAY = "ram-gateway"
+
+# 시크릿은 wrangler secret put 으로 등록:
+#   wrangler secret put TELEGRAM_BOT_TOKEN
+#   wrangler secret put GITHUB_TOKEN
+#   wrangler secret put WEBHOOK_SECRET
+#   wrangler secret put ALLOWED_USER_IDS
+#   wrangler secret put GEMINI_API_KEY

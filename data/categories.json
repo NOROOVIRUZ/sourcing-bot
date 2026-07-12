@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "updated": "2026-07-12",
+  "rules": {
+    "reuse_existing": "이미 있는 카테고리와 최대한 통일해서 재사용한다. 기존 카테고리 중 뭘 써도 안 맞을 때만 새로 만든다.",
+    "ambiguous_fallback": "업종/제품군을 전혀 특정 못하면 '기타'"
+  },
+  "categories": {
+    "애견": { "label": "애견", "description": "반려견 용품·사료·액세서리 등" },
+    "주방가전": { "label": "주방가전", "description": "주방 소형가전 (보아르 등)" },
+    "미용가전": { "label": "미용가전", "description": "헤어/뷰티 소형가전" },
+    "건강가전": { "label": "건강가전", "description": "마사지기 등 헬스케어 소형가전" },
+    "생활가전": { "label": "생활가전", "description": "가습기 등 생활 소형가전" },
+    "패키지·인쇄": { "label": "패키지·인쇄", "description": "패키지/인쇄 관련 업체" },
+    "기타": { "label": "기타", "description": "위 카테고리에 안 맞는 것" }
+  }
+}
