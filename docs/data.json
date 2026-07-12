@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-12T04:08:51.973Z",
+  "updated_at": "2026-07-12T04:14:36.321Z",
   "items": [
+    {
+      "id": "ivypet-en-alibaba-com-mrha4ra9",
+      "url": "https://x.alibaba.com/18OM6V?ck=minisite",
+      "domain": "ivypet.en.alibaba.com",
+      "company": "ivypet (알리바바 스토어)",
+      "desc_ko": "",
+      "category": "미분류",
+      "confidence": 0,
+      "classified_by": "manual",
+      "saved_at": "2026-07-12T04:14:36.321Z",
+      "added_by": "board",
+      "notes": null
+    },
     {
       "id": "ruffwear-com-mrh9xdh8",
       "url": "https://ruffwear.com/",
