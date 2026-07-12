@@ -1,7 +1,7 @@
 import type { Env, SourceEntry } from './types';
 import { TelegramAPI } from './telegram';
 import { getDataFile, putDataFile, getCategories } from './github';
-import { fetchPageMeta, classify } from './classifier';
+import { fetchPageMeta, classify, hasEnoughSignal } from './classifier';
 
 const DASHBOARD_URL = 'https://norooviruz.github.io/sourcing-bot/';
 
@@ -87,14 +87,40 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
     return;
   }
 
+  const id = `${domain.replace(/\./g, '-')}-${Date.now().toString(36)}`;
+
   try {
-    const [meta, categories] = await Promise.all([fetchPageMeta(url), getCategories(env)]);
+    const meta = await fetchPageMeta(url);
+
+    // 알리바바류 안티봇 캡차 페이지 — 못 읽었으면 정직하게 미분류로 저장(링크는 잃지 않되 거짓 분류는 안 함)
+    if (!hasEnoughSignal(meta)) {
+      const entry: SourceEntry = {
+        id, url, domain,
+        title: domain,
+        desc_ko: '(자동 추출 실패 — 접속 차단/캡차 페이지로 보임)',
+        category: '미분류',
+        confidence: 0,
+        classified_by: 'manual',
+        saved_at: new Date().toISOString(),
+        added_by: `telegram:${userId}`,
+        notes: null,
+      };
+      data.items.unshift(entry);
+      data.updated_at = entry.saved_at;
+      await putDataFile(env, data, sha, `add(미분류): ${domain}`);
+      await tg.sendMessage(
+        chatId,
+        `⚠️ 이 사이트는 못 읽었어 (차단/캡차 가능성). 일단 링크는 저장했어.\n` +
+          `직접 분류하려면: /분류 ${entry.id} <카테고리> <설명>`
+      );
+      return;
+    }
+
+    const categories = await getCategories(env);
     const result = await classify(env, url, meta, categories);
 
     const entry: SourceEntry = {
-      id: `${domain.replace(/\./g, '-')}-${Date.now().toString(36)}`,
-      url,
-      domain,
+      id, url, domain,
       title: result.title,
       desc_ko: result.desc_ko,
       category: result.category,
@@ -115,7 +141,7 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
     );
   } catch (e: any) {
     // 조용히 실패시키지 않음 — 원문 에러 그대로 보고
-    await tg.sendMessage(chatId, `⚠️ 분류 실패: ${e.message || e}\n일단 링크만이라도 저장할까? "/저장 ${url}"로 수동 저장 가능`);
+    await tg.sendMessage(chatId, `⚠️ 분류 실패: ${e.message || e}`);
   }
 }
 
@@ -131,9 +157,33 @@ async function handleCommand(text: string, chatId: number, userId: number, tg: T
         '링크를 그냥 보내면 자동 분류 저장돼.\n\n' +
         '/list [N] — 최근 N개 (기본 10)\n' +
         '/search <검색어> — 제목·설명·카테고리·도메인 검색\n' +
+        '/분류 <id> <카테고리> <설명> — 자동분류 실패한 항목 수동 수정\n' +
         '/delete <id> — 삭제\n' +
         '/dashboard — 대시보드 링크'
     );
+    return;
+  }
+
+  if (cmd === '/분류') {
+    const [id, category, ...descParts] = rest;
+    const desc = descParts.join(' ').trim();
+    if (!id || !category || !desc) {
+      await tg.sendMessage(chatId, '형식: /분류 <id> <카테고리> <설명>');
+      return;
+    }
+    const { data, sha } = await getDataFile(env);
+    const entry = data.items.find((it) => it.id === id);
+    if (!entry) {
+      await tg.sendMessage(chatId, `id "${id}"를 못 찾았어. /list로 확인해봐.`);
+      return;
+    }
+    entry.category = category;
+    entry.desc_ko = desc;
+    entry.confidence = 1;
+    entry.classified_by = 'manual';
+    data.updated_at = new Date().toISOString();
+    await putDataFile(env, data, sha, `recategorize: ${id} -> ${category}`);
+    await tg.sendMessage(chatId, `✅ 수정했어\n📂 ${category}\n📝 ${desc}`);
     return;
   }
 

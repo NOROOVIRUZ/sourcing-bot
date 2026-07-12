@@ -9,6 +9,7 @@ const CATEGORY_EMOJI = {
   '생활가전': '🏠',
   '패키지·인쇄': '📦',
   '기타': '🗂️',
+  '미분류': '❓',
 };
 
 const state = {

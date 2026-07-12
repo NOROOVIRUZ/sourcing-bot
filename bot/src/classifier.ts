@@ -18,6 +18,12 @@ export interface ClassifyResult {
   confidence: number;
 }
 
+// 알리바바 등 안티봇 캡차 페이지는 title/og 태그가 아예 없음 — 이걸 신호로 차단 여부 판별
+// (body 텍스트 길이는 캡차 방어 스크립트로도 부풀 수 있어 신호로 못 씀)
+export function hasEnoughSignal(meta: PageMeta): boolean {
+  return Boolean(meta.title || meta.ogTitle || meta.ogDesc || meta.metaDesc);
+}
+
 // 사이트가 JS로만 렌더돼도 og:title/description은 SNS 공유용이라 서버 HTML에 보통 박혀있음 — 브라우저 렌더링 없이 plain fetch로 충분
 export async function fetchPageMeta(url: string): Promise<PageMeta> {
   const res = await fetch(url, {
@@ -47,6 +53,9 @@ export async function fetchPageMeta(url: string): Promise<PageMeta> {
         if (property === 'description') meta.metaDesc = content;
       },
     })
+    // script/style는 body 텍스트로 안 새게 통째로 제거 (안 하면 캡차 방어 스크립트 코드가 "본문"으로 섞여 들어감)
+    .on('script', { element: (el) => { el.remove(); } })
+    .on('style', { element: (el) => { el.remove(); } })
     .on('body', {
       text(t) {
         if (bodyChars >= BODY_CAP) return;
