@@ -1,5 +1,19 @@
 {
   "version": 1,
-  "updated_at": "2026-07-12T00:00:00.000Z",
-  "items": []
+  "updated_at": "2026-07-12T03:48:47.476Z",
+  "items": [
+    {
+      "id": "www-made-in-china-com-mrh97jkj",
+      "url": "https://www.made-in-china.com/",
+      "domain": "www.made-in-china.com",
+      "company": "Made-in-China.com - Manufacturers, Suppliers & Products in China",
+      "desc_ko": "Source quality products Made in China. Find reliable China Suppliers, Manufacturers, Factories, Wholesalers & Exporters on the leading B2B e-commerce website Made-in-China.com.",
+      "category": "미분류",
+      "confidence": 0,
+      "classified_by": "manual",
+      "saved_at": "2026-07-12T03:48:47.476Z",
+      "added_by": "telegram:8176674830",
+      "notes": null
+    }
+  ]
 }
