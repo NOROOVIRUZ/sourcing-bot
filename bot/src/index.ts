@@ -5,10 +5,23 @@ import { fetchPageMeta, classify, hasEnoughSignal } from './classifier';
 
 const DASHBOARD_URL = 'https://norooviruz.github.io/sourcing-bot/';
 
+// 대시보드(github.io)가 다른 도메인이라 CORS 필요
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'content-type,x-board-secret',
+  'Access-Control-Allow-Methods': 'POST,OPTIONS',
+};
+
 export default {
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
 
+    if (req.method === 'OPTIONS') {
+      return new Response(null, { headers: CORS });
+    }
+    if (req.method === 'POST' && url.pathname === '/api/add') {
+      return handleAddApi(req, env);
+    }
     if (req.method === 'GET') {
       return new Response('sourcing-bot online 🔴', { status: 200 });
     }
@@ -72,24 +85,22 @@ function extractUrls(text: string): string[] {
   return matches.map((u) => u.replace(/[.,)\]]+$/, ''));
 }
 
-async function addSourceFlow(url: string, chatId: number, userId: number, tg: TelegramAPI, env: Env): Promise<void> {
-  let domain = '';
-  try {
-    domain = new URL(url).hostname;
-  } catch {
-    await tg.sendMessage(chatId, `이 링크는 못 읽겠어: ${url}`);
-    return;
-  }
+// 공용 저장 경로 — 텔레그램·보드 API 둘 다 이걸 탄다.
+// 핵심 = 링크 저장. 페이지 읽기/AI 분류는 되면 좋고 안 되면 넘어감 (GEMINI 키 없어도 동작).
+async function saveSource(
+  env: Env,
+  url: string,
+  addedBy: string
+): Promise<{ dup: boolean; entry?: SourceEntry; aiNote: string }> {
+  const domain = new URL(url).hostname;
 
   const { data, sha } = await getDataFile(env);
   if (data.items.some((it) => it.url === url)) {
-    await tg.sendMessage(chatId, `이미 저장돼 있어: ${domain}`);
-    return;
+    return { dup: true, aiNote: '' };
   }
 
   const id = `${domain.replace(/\./g, '-')}-${Date.now().toString(36)}`;
 
-  // 핵심 = 링크 저장. 페이지 읽기/AI 분류는 되면 좋고 안 되면 넘어감 (GEMINI 키 없어도 동작).
   let meta = { title: '', ogTitle: '', ogDesc: '', metaDesc: '', bodyText: '' };
   try {
     meta = await fetchPageMeta(url);
@@ -103,7 +114,7 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
     confidence: 0,
     classified_by: 'manual',
     saved_at: new Date().toISOString(),
-    added_by: `telegram:${userId}`,
+    added_by: addedBy,
     notes: null,
   };
 
@@ -117,23 +128,76 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
       entry.desc_ko = result.desc_ko;
       entry.confidence = result.confidence;
       entry.classified_by = 'ai';
-    } catch (e: any) {
-      aiNote = `\n(AI 분류는 실패해서 페이지 제목으로만 저장 — /분류 ${id} <카테고리> <설명> 으로 수정 가능)`;
+    } catch {
+      aiNote = `AI 분류는 실패해서 페이지 제목으로만 저장 — /분류 ${id} <카테고리> <설명> 으로 수정 가능`;
     }
   } else {
-    aiNote = `\n(사이트가 안 읽혀서 링크만 저장 — 차단/캡차 가능성. /분류 ${id} <카테고리> <설명> 으로 수정 가능)`;
+    aiNote = `사이트가 안 읽혀서 링크만 저장 — 차단/캡차 가능성. /분류 ${id} <카테고리> <설명> 으로 수정 가능`;
+  }
+
+  data.items.unshift(entry);
+  data.updated_at = entry.saved_at;
+  await putDataFile(env, data, sha, `add: ${domain} (${entry.category})`);
+
+  return { dup: false, entry, aiNote };
+}
+
+// 보드에서 직접 저장 — 대시보드 입력창이 POST {url} + x-board-secret 헤더로 호출
+async function handleAddApi(req: Request, env: Env): Promise<Response> {
+  const jsonRes = (status: number, body: unknown) =>
+    new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...CORS } });
+
+  const secret = req.headers.get('x-board-secret') || new URL(req.url).searchParams.get('secret');
+  if (secret !== env.WEBHOOK_SECRET) {
+    return jsonRes(401, { ok: false, error: 'forbidden' });
+  }
+
+  let body: any;
+  try {
+    body = await req.json();
+  } catch {
+    return jsonRes(400, { ok: false, error: 'invalid json' });
+  }
+  const rawUrl = String(body?.url || '').trim();
+  try {
+    const u = new URL(rawUrl);
+    if (!/^https?:$/.test(u.protocol)) throw new Error();
+  } catch {
+    return jsonRes(400, { ok: false, error: 'URL이 아니야' });
   }
 
   try {
-    data.items.unshift(entry);
-    data.updated_at = entry.saved_at;
-    await putDataFile(env, data, sha, `add: ${domain} (${entry.category})`);
+    const result = await saveSource(env, rawUrl, 'board');
+    if (result.dup) return jsonRes(409, { ok: false, error: '이미 저장돼 있어' });
+    return jsonRes(200, { ok: true, entry: result.entry, note: result.aiNote });
+  } catch (e: any) {
+    return jsonRes(502, { ok: false, error: e.message || String(e) });
+  }
+}
+
+async function addSourceFlow(url: string, chatId: number, userId: number, tg: TelegramAPI, env: Env): Promise<void> {
+  try {
+    new URL(url);
+  } catch {
+    await tg.sendMessage(chatId, `이 링크는 못 읽겠어: ${url}`);
+    return;
+  }
+
+  let result: { dup: boolean; entry?: SourceEntry; aiNote: string };
+  try {
+    result = await saveSource(env, url, `telegram:${userId}`);
   } catch (e: any) {
     // 저장 자체가 실패한 건 조용히 못 넘어감 — 원문 에러 그대로 보고
     await tg.sendMessage(chatId, `⚠️ 저장 실패: ${e.message || e}`);
     return;
   }
 
+  if (result.dup) {
+    await tg.sendMessage(chatId, `이미 저장돼 있어: ${new URL(url).hostname}`);
+    return;
+  }
+
+  const entry = result.entry!;
   await tg.sendMessage(
     chatId,
     `✅ 저장했어\n🏭 ${entry.company}\n📂 ${entry.category}` +
@@ -141,7 +205,7 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
       (entry.classified_by === 'ai' && entry.confidence < 0.6
         ? `\n⚠️ 신뢰도 낮음(${Math.round(entry.confidence * 100)}%) — 카테고리 확인해줘`
         : '') +
-      aiNote
+      (result.aiNote ? `\n(${result.aiNote})` : '')
   );
 }
 
@@ -160,6 +224,7 @@ async function handleCommand(text: string, chatId: number, userId: number, tg: T
         '/분류 <id> <카테고리> <설명> — 자동분류 실패한 항목 수동 수정\n' +
         '/delete <id> — 삭제\n' +
         '/dashboard /대쉬보드 — 대시보드 링크\n' +
+        '/보드키 — 보드 입력창 활성화 링크 (기기당 1회)\n' +
         '/알람끔 /알람켬 — 모든 봇 알람 스위치'
     );
     return;
@@ -202,6 +267,12 @@ async function handleCommand(text: string, chatId: number, userId: number, tg: T
 
   if (cmd === '/dashboard' || cmd === '/대쉬보드' || cmd === '/대시보드') {
     await tg.sendMessage(chatId, `🌐 [대시보드 열기](${DASHBOARD_URL})`, { disablePreview: false });
+    return;
+  }
+
+  // 보드 입력창용 비밀키 세팅 링크 — 이 링크로 열면 그 기기 브라우저에 키가 저장돼서 보드에서 바로 저장 가능
+  if (cmd === '/보드키') {
+    await tg.sendMessage(chatId, `이 링크로 한 번 열면 그 기기에선 보드 입력창을 바로 쓸 수 있어:\n${DASHBOARD_URL}#secret=${env.WEBHOOK_SECRET}`);
     return;
   }
 

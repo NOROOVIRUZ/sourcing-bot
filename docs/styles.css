@@ -119,6 +119,58 @@ a { color: inherit; text-decoration: none; }
   padding: 0 24px 24px;
 }
 
+/* ===== Add (보드에서 직접 저장) ===== */
+.add-section {
+  max-width: 720px;
+  margin: 0 auto var(--space-4);
+}
+
+.add-box {
+  display: flex;
+  gap: var(--space-2);
+}
+
+#addInput {
+  flex: 1;
+  height: var(--hit-min);
+  padding: 0 20px;
+  background: var(--bg-grouped-cell);
+  border: 1px solid var(--separator);
+  border-radius: var(--radius-capsule);
+  font: 400 16px var(--font-text);
+  color: var(--label);
+  outline: none;
+  transition: border-color var(--duration-quick) var(--ease-standard);
+}
+
+#addInput:focus { border-color: var(--tint); }
+#addInput::placeholder { color: var(--label-tertiary); }
+
+#addBtn {
+  height: var(--hit-min);
+  padding: 0 28px;
+  border: none;
+  border-radius: var(--radius-capsule);
+  background: var(--tint);
+  color: #fff;
+  font: 600 15px var(--font-text);
+  cursor: pointer;
+  transition: transform var(--duration-press) var(--ease-standard),
+              opacity var(--duration-quick) var(--ease-standard);
+}
+
+#addBtn:active { transform: scale(0.97); }
+#addBtn:disabled { opacity: 0.5; cursor: default; }
+
+.add-status {
+  margin-top: var(--space-2);
+  text-align: center;
+  font: 400 13px var(--font-text);
+  color: var(--label-secondary);
+}
+
+.add-status.error { color: var(--red); }
+
 /* ===== Search ===== */
 .search-section {
   display: flex;

@@ -39,7 +39,8 @@ export async function fetchPageMeta(url: string): Promise<PageMeta> {
   const BODY_CAP = 3000;
 
   const rewriter = new HTMLRewriter()
-    .on('title', {
+    // head > title 만 — 그냥 'title'로 잡으면 본문 SVG 아이콘의 <title>까지 죄다 딸려옴 (ruffwear.com에서 실측)
+    .on('head > title', {
       text(t) {
         meta.title += t.text;
       },
@@ -67,9 +68,24 @@ export async function fetchPageMeta(url: string): Promise<PageMeta> {
 
   await rewriter.transform(res).arrayBuffer();
 
-  meta.title = meta.title.trim();
+  meta.title = cleanText(meta.title);
+  meta.ogTitle = cleanText(meta.ogTitle);
+  meta.ogDesc = cleanText(meta.ogDesc);
+  meta.metaDesc = cleanText(meta.metaDesc);
   meta.bodyText = meta.bodyText.trim().slice(0, BODY_CAP);
   return meta;
+}
+
+// 공백 정리 + 흔한 HTML 엔티티 복원 (&amp; 등이 카드에 그대로 보이는 것 방지)
+function cleanText(s: string): string {
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export async function classify(env: Env, url: string, meta: PageMeta, categories: CategoriesFile): Promise<ClassifyResult> {

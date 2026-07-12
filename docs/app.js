@@ -1,6 +1,18 @@
 // VUUI 개발보드 · 링크 저장소 대시보드
 // data.json + categories.json → 검색/필터/정렬 렌더
 
+const WORKER_URL = 'https://sourcing-bot.noroovirus-dev.workers.dev';
+const SECRET_KEY = 'vuui_board_secret';
+
+// 최초 1회: 대시보드를 #secret=... 붙여 열면 localStorage에 저장하고 주소에서 지움
+(function seedSecret() {
+  const m = location.hash.match(/secret=([0-9a-f]+)/);
+  if (m) {
+    localStorage.setItem(SECRET_KEY, m[1]);
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+})();
+
 const state = {
   items: [],
   filter: { search: '', category: 'all' },
@@ -131,10 +143,65 @@ function renderHeaderStats() {
   document.getElementById('brandStats').textContent = `저장된 링크 ${state.items.length}개`;
 }
 
+async function addFromBoard(url) {
+  let secret = localStorage.getItem(SECRET_KEY);
+  if (!secret) {
+    secret = window.prompt('보드 비밀키 입력 (최초 1회만)');
+    if (!secret) return null;
+    localStorage.setItem(SECRET_KEY, secret.trim());
+    secret = secret.trim();
+  }
+  const res = await fetch(`${WORKER_URL}/api/add`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-board-secret': secret },
+    body: JSON.stringify({ url }),
+  });
+  const json = await res.json();
+  if (res.status === 401) {
+    localStorage.removeItem(SECRET_KEY); // 틀린 키는 지워서 다음에 다시 묻게
+    throw new Error('비밀키가 틀렸어. 다시 시도해줘.');
+  }
+  if (!json.ok) throw new Error(json.error || '저장 실패');
+  return json;
+}
+
+function bindAddForm() {
+  const form = document.getElementById('addForm');
+  const input = document.getElementById('addInput');
+  const btn = document.getElementById('addBtn');
+  const status = document.getElementById('addStatus');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = input.value.trim();
+    if (!url) return;
+    btn.disabled = true;
+    status.hidden = false;
+    status.classList.remove('error');
+    status.textContent = '저장 중… (페이지 읽는 중)';
+    try {
+      const json = await addFromBoard(url);
+      if (!json) { status.hidden = true; return; }
+      state.items.unshift(json.entry);
+      input.value = '';
+      status.textContent = `저장했어 — ${json.entry.company} [${json.entry.category}]` + (json.note ? ` · ${json.note}` : '');
+      renderHeaderStats();
+      render();
+    } catch (err) {
+      status.classList.add('error');
+      status.textContent = err.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
 function bindEvents() {
   const input = document.getElementById('searchInput');
   const clearBtn = document.getElementById('clearSearch');
   const sort = document.getElementById('sortSelect');
+
+  bindAddForm();
 
   input.addEventListener('input', () => {
     state.filter.search = input.value;
