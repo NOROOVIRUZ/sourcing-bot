@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-12T03:52:44.182Z",
+  "updated_at": "2026-07-12T03:52:56.139Z",
   "items": [
+    {
+      "id": "ivypet-en-alibaba-com-mrh9cu9i",
+      "url": "https://ivypet.en.alibaba.com/company_profile.html?tracelog=sns_minisite&from=share&ckvia=share_c1c183e0c4dc4888a90a3b52ae5923e5",
+      "domain": "ivypet.en.alibaba.com",
+      "company": "ivypet.en.alibaba.com",
+      "desc_ko": "",
+      "category": "미분류",
+      "confidence": 0,
+      "classified_by": "manual",
+      "saved_at": "2026-07-12T03:52:56.139Z",
+      "added_by": "telegram:8176674830",
+      "notes": null
+    },
     {
       "id": "x-alibaba-com-mrh9ck31",
       "url": "https://x.alibaba.com/18OLvT?ck=minisite",
