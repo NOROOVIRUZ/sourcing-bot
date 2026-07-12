@@ -60,10 +60,10 @@ function applyFilter() {
   let result = state.items.filter((it) => {
     if (cat !== 'all' && it.category !== cat) return false;
     if (!q) return true;
-    return [it.title, it.desc_ko, it.category, it.domain].join(' ').toLowerCase().includes(q);
+    return [it.company, it.desc_ko, it.category, it.domain].join(' ').toLowerCase().includes(q);
   });
   if (state.sort === 'name_asc') {
-    result.sort((a, b) => a.title.localeCompare(b.title, 'ko'));
+    result.sort((a, b) => a.company.localeCompare(b.company, 'ko'));
   } else {
     result.sort((a, b) => new Date(b.saved_at) - new Date(a.saved_at));
   }
@@ -81,7 +81,7 @@ function renderCardHtml(it) {
         <span class="card-category">${emoji} ${escapeHtml(it.category)}</span>
       </div>
       <div>
-        <div class="card-name">${escapeHtml(it.title)}</div>
+        <div class="card-name">${escapeHtml(it.company)}</div>
         <div class="card-domain">${escapeHtml(it.domain)}</div>
       </div>
       <div class="card-desc">${escapeHtml(it.desc_ko) || '설명 없음'}</div>

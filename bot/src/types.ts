@@ -17,7 +17,7 @@ export interface SourceEntry {
   id: string;
   url: string;
   domain: string;
-  title: string;
+  company: string;
   desc_ko: string;
   category: string;
   confidence: number;

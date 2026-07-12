@@ -11,9 +11,6 @@ CATEGORIES_PATH = "data/categories.json"
 CF_ACCOUNT_ID = "48270de429136aa3f2f559277aa8a8d6"
 AI_GATEWAY = "ram-gateway"
 
-# 시크릿은 wrangler secret put 으로 등록:
-#   wrangler secret put TELEGRAM_BOT_TOKEN
-#   wrangler secret put GITHUB_TOKEN
-#   wrangler secret put WEBHOOK_SECRET
-#   wrangler secret put ALLOWED_USER_IDS
-#   wrangler secret put GEMINI_API_KEY
+# 시크릿 등록: .dev.vars.example을 .dev.vars로 복사해 TextEdit으로 값 채운 뒤
+#   wrangler secret bulk .dev.vars
+# 로 한 번에 업로드 (.dev.vars는 .gitignore 처리됨, 커밋 안 됨)

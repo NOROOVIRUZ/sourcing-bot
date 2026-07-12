@@ -12,7 +12,7 @@ export interface PageMeta {
 }
 
 export interface ClassifyResult {
-  title: string;
+  company: string;
   category: string;
   desc_ko: string;
   confidence: number;
@@ -79,8 +79,11 @@ export async function classify(env: Env, url: string, meta: PageMeta, categories
     .join('\n');
 
   const systemPrompt =
-    '너는 소싱 담당자를 돕는 분류 도우미다. 업체/제품 사이트 링크 하나를 보고 (1) 이미 있는 카테고리 중 가장 알맞은 것을 고르고 ' +
-    '(2) 이 사이트가 어떤 업체/제품군인지 한국어로 1~2문장 요약한다. 반드시 지정된 JSON 스키마로만 답한다.';
+    '너는 소싱 담당자를 돕는 분류 도우미다. 업체/제품 사이트 링크 하나를 보고 ' +
+    '(1) 회사/공장명(마켓플레이스명·"Wholesale" 같은 광고문구는 빼고 실제 업체명만), ' +
+    '(2) 이미 있는 카테고리 중 가장 알맞은 것, ' +
+    '(3) 어떤 제품/업체인지 한국어 1문장 짧은 설명을 뽑는다. 회사명이 안 보이면 도메인을 그대로 써라. ' +
+    '반드시 지정된 JSON 스키마로만 답한다.';
 
   const userPrompt =
     `[URL]\n${url} (도메인: ${domain})\n\n` +
@@ -90,7 +93,7 @@ export async function classify(env: Env, url: string, meta: PageMeta, categories
     `[카테고리 목록]\n${catList}\n\n` +
     `[규칙]\n${Object.values(categories.rules).join('\n')}\n\n` +
     '반드시 아래 JSON 스키마로만 출력하라. 설명·인사·마크다운 금지:\n' +
-    '{"category":"<카테고리 목록 중 하나 또는 신규>","desc_ko":"<1~2문장 한국어 요약>","confidence":<0~1 사이 숫자>}';
+    '{"company":"<회사/공장명>","category":"<카테고리 목록 중 하나 또는 신규>","desc_ko":"<1문장 짧은 설명>","confidence":<0~1 사이 숫자>}';
 
   if (!env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY가 설정되지 않았습니다.');
 
@@ -100,7 +103,7 @@ export async function classify(env: Env, url: string, meta: PageMeta, categories
       const raw = await callGemini(env, systemPrompt, userPrompt, model);
       const parsed = JSON.parse(raw);
       return {
-        title: meta.title || meta.ogTitle || domain,
+        company: String(parsed.company || meta.title || meta.ogTitle || domain),
         category: String(parsed.category || '기타'),
         desc_ko: String(parsed.desc_ko || ''),
         confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.5,

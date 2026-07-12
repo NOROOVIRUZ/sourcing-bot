@@ -96,7 +96,7 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
     if (!hasEnoughSignal(meta)) {
       const entry: SourceEntry = {
         id, url, domain,
-        title: domain,
+        company: domain,
         desc_ko: '(자동 추출 실패 — 접속 차단/캡차 페이지로 보임)',
         category: '미분류',
         confidence: 0,
@@ -121,7 +121,7 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
 
     const entry: SourceEntry = {
       id, url, domain,
-      title: result.title,
+      company: result.company,
       desc_ko: result.desc_ko,
       category: result.category,
       confidence: result.confidence,
@@ -136,7 +136,7 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
 
     await tg.sendMessage(
       chatId,
-      `✅ 저장했어\n📂 ${entry.category}\n📝 ${entry.desc_ko}\n🔗 ${domain}` +
+      `✅ 저장했어\n🏭 ${entry.company}\n📂 ${entry.category}\n📝 ${entry.desc_ko}` +
         (entry.confidence < 0.6 ? `\n⚠️ 신뢰도 낮음(${Math.round(entry.confidence * 100)}%) — 카테고리 확인해줘` : '')
     );
   } catch (e: any) {
@@ -199,7 +199,7 @@ async function handleCommand(text: string, chatId: number, userId: number, tg: T
       await tg.sendMessage(chatId, '아직 저장된 게 없어.');
       return;
     }
-    const lines = data.items.slice(0, n).map((it) => `• [${it.category}] ${it.domain} — ${it.desc_ko}\n  id: ${it.id}`);
+    const lines = data.items.slice(0, n).map((it) => `• [${it.category}] ${it.company} — ${it.desc_ko}\n  id: ${it.id}`);
     await tg.sendMessage(chatId, lines.join('\n\n'));
     return;
   }
@@ -212,13 +212,13 @@ async function handleCommand(text: string, chatId: number, userId: number, tg: T
     const { data } = await getDataFile(env);
     const q = arg.toLowerCase();
     const hits = data.items.filter((it) =>
-      [it.title, it.desc_ko, it.category, it.domain].join(' ').toLowerCase().includes(q)
+      [it.company, it.desc_ko, it.category, it.domain].join(' ').toLowerCase().includes(q)
     );
     if (hits.length === 0) {
       await tg.sendMessage(chatId, `"${arg}" 결과 없음.`);
       return;
     }
-    const lines = hits.slice(0, 20).map((it) => `• [${it.category}] ${it.domain} — ${it.desc_ko}\n  id: ${it.id}`);
+    const lines = hits.slice(0, 20).map((it) => `• [${it.category}] ${it.company} — ${it.desc_ko}\n  id: ${it.id}`);
     await tg.sendMessage(chatId, lines.join('\n\n'));
     return;
   }
