@@ -9,6 +9,7 @@ export interface PageMeta {
   ogDesc: string;
   metaDesc: string;
   bodyText: string;
+  finalUrl: string; // 리다이렉트 따라간 최종 URL — 단축링크(x.alibaba.com 등)의 실체 파악용
 }
 
 export interface ClassifyResult {
@@ -34,7 +35,7 @@ export async function fetchPageMeta(url: string): Promise<PageMeta> {
   });
   if (!res.ok) throw new Error(`페이지 요청 실패: HTTP ${res.status}`);
 
-  const meta: PageMeta = { title: '', ogTitle: '', ogDesc: '', metaDesc: '', bodyText: '' };
+  const meta: PageMeta = { title: '', ogTitle: '', ogDesc: '', metaDesc: '', bodyText: '', finalUrl: res.url || url };
   let bodyChars = 0;
   const BODY_CAP = 3000;
 

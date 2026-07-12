@@ -99,16 +99,28 @@ async function saveSource(
     return { dup: true, aiNote: '' };
   }
 
-  const id = `${domain.replace(/\./g, '-')}-${Date.now().toString(36)}`;
-
-  let meta = { title: '', ogTitle: '', ogDesc: '', metaDesc: '', bodyText: '' };
+  let meta = { title: '', ogTitle: '', ogDesc: '', metaDesc: '', bodyText: '', finalUrl: url };
   try {
     meta = await fetchPageMeta(url);
   } catch {}
 
+  // 단축링크(x.alibaba.com/xxx)는 리다이렉트 최종 도메인이 실체 — 그걸 기준으로 저장
+  let finalDomain = domain;
+  try {
+    finalDomain = new URL(meta.finalUrl).hostname;
+  } catch {}
+
+  // 알리바바 스토어는 콘텐츠가 캡차로 막혀도 서브도메인 = 스토어명 (ivypet.en.alibaba.com 실측)
+  const storeMatch = finalDomain.match(/^([a-z0-9][a-z0-9-]*)\.(?:en\.)?alibaba\.com$/i);
+  const NOT_STORES = new Set(['www', 'x', 'm', 'sale', 'activity', 'message', 'login', 'passport']);
+  const storeName = storeMatch && !NOT_STORES.has(storeMatch[1].toLowerCase()) ? storeMatch[1] : null;
+
+  const id = `${finalDomain.replace(/\./g, '-')}-${Date.now().toString(36)}`;
+
   const entry: SourceEntry = {
-    id, url, domain,
-    company: (meta.title || meta.ogTitle || domain).slice(0, 120),
+    id, url,
+    domain: finalDomain,
+    company: (meta.title || meta.ogTitle || (storeName ? `${storeName} (알리바바 스토어)` : finalDomain)).slice(0, 120),
     desc_ko: meta.ogDesc || meta.metaDesc || '',
     category: '미분류',
     confidence: 0,
@@ -137,7 +149,7 @@ async function saveSource(
 
   data.items.unshift(entry);
   data.updated_at = entry.saved_at;
-  await putDataFile(env, data, sha, `add: ${domain} (${entry.category})`);
+  await putDataFile(env, data, sha, `add: ${finalDomain} (${entry.category})`);
 
   return { dup: false, entry, aiNote };
 }
