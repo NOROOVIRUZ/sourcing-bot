@@ -1,16 +1,5 @@
-// 소싱함 · 신제품 소싱 링크 저장소 대시보드
+// VUUI 개발보드 · 링크 저장소 대시보드
 // data.json + categories.json → 검색/필터/정렬 렌더
-
-const CATEGORY_EMOJI = {
-  '애견': '🐶',
-  '주방가전': '🍳',
-  '미용가전': '💇',
-  '건강가전': '💆',
-  '생활가전': '🏠',
-  '패키지·인쇄': '📦',
-  '기타': '🗂️',
-  '미분류': '❓',
-};
 
 const state = {
   items: [],
@@ -50,7 +39,7 @@ async function loadData() {
   } catch (e) {
     console.error('데이터 로드 실패', e);
     document.getElementById('mainContent').innerHTML =
-      '<div class="empty-state"><div class="empty-emoji">⚠️</div><div class="empty-title">데이터를 불러올 수 없어</div></div>';
+      '<div class="empty-state"><div class="empty-title">데이터를 불러올 수 없어</div></div>';
   }
 }
 
@@ -71,14 +60,13 @@ function applyFilter() {
 }
 
 function renderCardHtml(it) {
-  const emoji = CATEGORY_EMOJI[it.category] || '🗂️';
   const conf = it.confidence < 0.6
-    ? `<span class="card-confidence low">신뢰도 ${(it.confidence * 100).toFixed(0)}%</span>`
+    ? `<span class="card-confidence">신뢰도 ${(it.confidence * 100).toFixed(0)}%</span>`
     : '';
   return `
     <article class="card" data-url="${escapeHtml(it.url)}">
       <div class="card-top">
-        <span class="card-category">${emoji} ${escapeHtml(it.category)}</span>
+        <span class="card-category">${escapeHtml(it.category)}</span>
       </div>
       <div>
         <div class="card-name">${escapeHtml(it.company)}</div>
@@ -98,14 +86,13 @@ function renderChips(items) {
   const counts = {};
   state.items.forEach((it) => { counts[it.category] = (counts[it.category] || 0) + 1; });
   const chips = [
-    { key: 'all', label: '전체', emoji: '✨', count: state.items.length },
+    { key: 'all', label: '전체', count: state.items.length },
     ...Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({
-      key: k, label: k, emoji: CATEGORY_EMOJI[k] || '🗂️', count: v,
+      key: k, label: k, count: v,
     })),
   ];
   chipRow.innerHTML = chips.map((c) => `
     <button class="chip ${state.filter.category === c.key ? 'active' : ''}" data-key="${escapeHtml(c.key)}">
-      <span class="chip-emoji">${c.emoji}</span>
       <span>${escapeHtml(c.label)}</span>
       <span class="chip-count">${c.count}</span>
     </button>
