@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-12T04:06:41.424Z",
+  "updated_at": "2026-07-12T04:08:51.973Z",
   "items": [
+    {
+      "id": "ruffwear-com-mrh9xdh8",
+      "url": "https://ruffwear.com/",
+      "domain": "ruffwear.com",
+      "company": "Performance Dog Gear | Ruffwear",
+      "desc_ko": "Building dog gear to enhance your outdoor adventures. Trail tested & rugged dog boots, dog coats, dog harnesses, dog life jackets and much more.",
+      "category": "미분류",
+      "confidence": 0,
+      "classified_by": "manual",
+      "saved_at": "2026-07-12T04:08:51.973Z",
+      "added_by": "board",
+      "notes": null
+    },
     {
       "id": "x-alibaba-com-mrh9d0xc",
       "url": "https://x.alibaba.com/18OM6V?ck=minisite",
