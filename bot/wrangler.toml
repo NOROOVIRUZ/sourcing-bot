@@ -11,6 +11,11 @@ CATEGORIES_PATH = "data/categories.json"
 CF_ACCOUNT_ID = "48270de429136aa3f2f559277aa8a8d6"
 AI_GATEWAY = "ram-gateway"
 
+# 알람 전역 스위치 — asuka_bot·ayanami 워커와 같은 KV 네임스페이스 공유, 키: alarm_muted
+[[kv_namespaces]]
+binding = "ALARM_KV"
+id = "600bbb5294b547e9bb3084d4f1f184d4"
+
 # 시크릿 등록: .dev.vars.example을 .dev.vars로 복사해 TextEdit으로 값 채운 뒤
 #   wrangler secret bulk .dev.vars
 # 로 한 번에 업로드 (.dev.vars는 .gitignore 처리됨, 커밋 안 됨)

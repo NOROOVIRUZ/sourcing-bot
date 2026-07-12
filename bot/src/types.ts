@@ -11,6 +11,7 @@ export interface Env {
   CF_ACCOUNT_ID?: string;
   AI_GATEWAY?: string;
   AI_GATEWAY_TOKEN?: string;
+  ALARM_KV: KVNamespace;
 }
 
 export interface SourceEntry {

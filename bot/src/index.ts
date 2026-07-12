@@ -89,60 +89,60 @@ async function addSourceFlow(url: string, chatId: number, userId: number, tg: Te
 
   const id = `${domain.replace(/\./g, '-')}-${Date.now().toString(36)}`;
 
+  // 핵심 = 링크 저장. 페이지 읽기/AI 분류는 되면 좋고 안 되면 넘어감 (GEMINI 키 없어도 동작).
+  let meta = { title: '', ogTitle: '', ogDesc: '', metaDesc: '', bodyText: '' };
   try {
-    const meta = await fetchPageMeta(url);
+    meta = await fetchPageMeta(url);
+  } catch {}
 
-    // 알리바바류 안티봇 캡차 페이지 — 못 읽었으면 정직하게 미분류로 저장(링크는 잃지 않되 거짓 분류는 안 함)
-    if (!hasEnoughSignal(meta)) {
-      const entry: SourceEntry = {
-        id, url, domain,
-        company: domain,
-        desc_ko: '(자동 추출 실패 — 접속 차단/캡차 페이지로 보임)',
-        category: '미분류',
-        confidence: 0,
-        classified_by: 'manual',
-        saved_at: new Date().toISOString(),
-        added_by: `telegram:${userId}`,
-        notes: null,
-      };
-      data.items.unshift(entry);
-      data.updated_at = entry.saved_at;
-      await putDataFile(env, data, sha, `add(미분류): ${domain}`);
-      await tg.sendMessage(
-        chatId,
-        `⚠️ 이 사이트는 못 읽었어 (차단/캡차 가능성). 일단 링크는 저장했어.\n` +
-          `직접 분류하려면: /분류 ${entry.id} <카테고리> <설명>`
-      );
-      return;
+  const entry: SourceEntry = {
+    id, url, domain,
+    company: (meta.title || meta.ogTitle || domain).slice(0, 120),
+    desc_ko: meta.ogDesc || meta.metaDesc || '',
+    category: '미분류',
+    confidence: 0,
+    classified_by: 'manual',
+    saved_at: new Date().toISOString(),
+    added_by: `telegram:${userId}`,
+    notes: null,
+  };
+
+  let aiNote = '';
+  if (hasEnoughSignal(meta)) {
+    try {
+      const categories = await getCategories(env);
+      const result = await classify(env, url, meta, categories);
+      entry.company = result.company;
+      entry.category = result.category;
+      entry.desc_ko = result.desc_ko;
+      entry.confidence = result.confidence;
+      entry.classified_by = 'ai';
+    } catch (e: any) {
+      aiNote = `\n(AI 분류는 실패해서 페이지 제목으로만 저장 — /분류 ${id} <카테고리> <설명> 으로 수정 가능)`;
     }
+  } else {
+    aiNote = `\n(사이트가 안 읽혀서 링크만 저장 — 차단/캡차 가능성. /분류 ${id} <카테고리> <설명> 으로 수정 가능)`;
+  }
 
-    const categories = await getCategories(env);
-    const result = await classify(env, url, meta, categories);
-
-    const entry: SourceEntry = {
-      id, url, domain,
-      company: result.company,
-      desc_ko: result.desc_ko,
-      category: result.category,
-      confidence: result.confidence,
-      classified_by: 'ai',
-      saved_at: new Date().toISOString(),
-      added_by: `telegram:${userId}`,
-      notes: null,
-    };
+  try {
     data.items.unshift(entry);
     data.updated_at = entry.saved_at;
     await putDataFile(env, data, sha, `add: ${domain} (${entry.category})`);
-
-    await tg.sendMessage(
-      chatId,
-      `✅ 저장했어\n🏭 ${entry.company}\n📂 ${entry.category}\n📝 ${entry.desc_ko}` +
-        (entry.confidence < 0.6 ? `\n⚠️ 신뢰도 낮음(${Math.round(entry.confidence * 100)}%) — 카테고리 확인해줘` : '')
-    );
   } catch (e: any) {
-    // 조용히 실패시키지 않음 — 원문 에러 그대로 보고
-    await tg.sendMessage(chatId, `⚠️ 분류 실패: ${e.message || e}`);
+    // 저장 자체가 실패한 건 조용히 못 넘어감 — 원문 에러 그대로 보고
+    await tg.sendMessage(chatId, `⚠️ 저장 실패: ${e.message || e}`);
+    return;
   }
+
+  await tg.sendMessage(
+    chatId,
+    `✅ 저장했어\n🏭 ${entry.company}\n📂 ${entry.category}` +
+      (entry.desc_ko ? `\n📝 ${entry.desc_ko}` : '') +
+      (entry.classified_by === 'ai' && entry.confidence < 0.6
+        ? `\n⚠️ 신뢰도 낮음(${Math.round(entry.confidence * 100)}%) — 카테고리 확인해줘`
+        : '') +
+      aiNote
+  );
 }
 
 async function handleCommand(text: string, chatId: number, userId: number, tg: TelegramAPI, env: Env): Promise<void> {
@@ -159,8 +159,21 @@ async function handleCommand(text: string, chatId: number, userId: number, tg: T
         '/search <검색어> — 제목·설명·카테고리·도메인 검색\n' +
         '/분류 <id> <카테고리> <설명> — 자동분류 실패한 항목 수동 수정\n' +
         '/delete <id> — 삭제\n' +
-        '/dashboard — 대시보드 링크'
+        '/dashboard /대쉬보드 — 대시보드 링크\n' +
+        '/알람끔 /알람켬 — 모든 봇 알람 스위치'
     );
+    return;
+  }
+
+  if (cmd === '/알람끔') {
+    await env.ALARM_KV.put('alarm_muted', '1');
+    await tg.sendMessage(chatId, '🔕 알람 전부 껐어. 다시 들으려면 /알람켬');
+    return;
+  }
+
+  if (cmd === '/알람켬') {
+    await env.ALARM_KV.delete('alarm_muted');
+    await tg.sendMessage(chatId, '🔔 알람 켰어. 이제 다 알려줄게.');
     return;
   }
 
@@ -187,8 +200,8 @@ async function handleCommand(text: string, chatId: number, userId: number, tg: T
     return;
   }
 
-  if (cmd === '/dashboard') {
-    await tg.sendMessage(chatId, DASHBOARD_URL, { disablePreview: false });
+  if (cmd === '/dashboard' || cmd === '/대쉬보드' || cmd === '/대시보드') {
+    await tg.sendMessage(chatId, `🌐 [대시보드 열기](${DASHBOARD_URL})`, { disablePreview: false });
     return;
   }
 
