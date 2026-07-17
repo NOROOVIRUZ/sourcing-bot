@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-12T04:14:36.321Z",
+  "updated_at": "2026-07-17T06:11:03.879Z",
   "items": [
+    {
+      "id": "www-alibaba-com-mrojhs93",
+      "url": "https://www.alibaba.com/product-detail/Multiple-Colorful-Round-Rope-Pet-Dog_1601466793032.html?spm=a2700.prosearch.normal_offer.d_image.12a167afRT4iKp&priceId=246e11cc970d421f8f9203d2f2ca2945",
+      "domain": "www.alibaba.com",
+      "company": "www.alibaba.com",
+      "desc_ko": "",
+      "category": "미분류",
+      "confidence": 0,
+      "classified_by": "manual",
+      "saved_at": "2026-07-17T06:11:03.879Z",
+      "added_by": "telegram:8176674830",
+      "notes": null
+    },
     {
       "id": "ruffwear-com-mrh9xdh8",
       "url": "https://ruffwear.com/",
