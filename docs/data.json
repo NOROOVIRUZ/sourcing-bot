@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-20T11:46:26.189Z",
+  "updated_at": "2026-07-20T12:08:21.916Z",
   "items": [
+    {
+      "id": "hozi-co-kr-mrt6kty4",
+      "url": "https://hozi.co.kr",
+      "domain": "hozi.co.kr",
+      "company": "호지 (HOZI)",
+      "desc_ko": "호지, HOZI, 강아지 하네스, 목줄, 리쉬줄, 리드줄, 에센셜하네스, 새들하네스, 홀스빗하네스, 풉백, 강아지옷",
+      "category": "미분류",
+      "confidence": 0,
+      "classified_by": "manual",
+      "saved_at": "2026-07-20T12:08:21.916Z",
+      "added_by": "board",
+      "notes": null
+    },
     {
       "id": "www-alibaba-com-mrt5smq5",
       "url": "https://www.alibaba.com/x/18R9Tc?ck=pdp",
