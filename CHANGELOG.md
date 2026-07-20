@@ -1,5 +1,13 @@
 # CHANGELOG — VUUI 개발보드 (sourcing-bot)
 
+## v3 — 2026-07-20
+- 대시보드 카드 직접 수정/삭제 기능 추가 — 카드에 마우스 올리면 [수정]/[삭제] 버튼(터치 기기는 항상 노출). 보드키(x-board-secret) 인증 재사용
+- 수정 = 회사·공장명 + 카테고리 + 설명을 인라인 폼에서 편집 (텔레그램 /분류는 회사명을 못 고쳤음 — 이걸 해결). 카테고리는 기존 값 자동완성(datalist)
+- 신뢰도 업데이트: 노루군이 수동 확정하면 confidence=1 → "확인 필요" 배지 사라짐. www.alibaba.com처럼 회사명 못 딴 미확정 카드는 왼쪽 빨간 힌트 + "확인 필요" 배지로 구분
+- 워커 API 추가: POST /api/update {id, company?, category?, desc_ko?}, POST /api/delete {id} (둘 다 x-board-secret 인증, saveSource/putDataFile 패턴 재사용)
+- hozi(주식회사 호지, hozi.co.kr) 브랜드 소싱함 등록 — 한국 반려견 워킹 액세서리 프리미엄, VUUI 벤치마크(러프웨어=아웃도어 / 호지=패션·감성)
+- 검색 키워드: 카드 수정 삭제 편집 신뢰도 confidence api/update api/delete alibaba www.alibaba.com hozi 호지
+
 ## v2 — 2026-07-12
 - 단축링크 리다이렉트 추적: x.alibaba.com/xxx 를 최종 도메인(스토어 주소)으로 풀어서 저장
 - 알리바바 스토어명 자동 추출: 콘텐츠가 캡차로 막혀도 서브도메인(ivypet 등)을 회사명으로 사용

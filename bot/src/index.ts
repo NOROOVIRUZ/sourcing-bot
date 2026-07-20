@@ -12,6 +12,19 @@ const CORS = {
   'Access-Control-Allow-Methods': 'POST,OPTIONS',
 };
 
+function jsonRes(status: number, body: unknown): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json', ...CORS },
+  });
+}
+
+// 보드 API 공용 인증 — 헤더나 쿼리의 secret이 WEBHOOK_SECRET과 일치해야 함
+function boardAuthed(req: Request, env: Env): boolean {
+  const secret = req.headers.get('x-board-secret') || new URL(req.url).searchParams.get('secret');
+  return !!secret && secret === env.WEBHOOK_SECRET;
+}
+
 export default {
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
@@ -21,6 +34,12 @@ export default {
     }
     if (req.method === 'POST' && url.pathname === '/api/add') {
       return handleAddApi(req, env);
+    }
+    if (req.method === 'POST' && url.pathname === '/api/update') {
+      return handleUpdateApi(req, env);
+    }
+    if (req.method === 'POST' && url.pathname === '/api/delete') {
+      return handleDeleteApi(req, env);
     }
     if (req.method === 'GET') {
       return new Response('sourcing-bot online 🔴', { status: 200 });
@@ -156,11 +175,7 @@ async function saveSource(
 
 // 보드에서 직접 저장 — 대시보드 입력창이 POST {url} + x-board-secret 헤더로 호출
 async function handleAddApi(req: Request, env: Env): Promise<Response> {
-  const jsonRes = (status: number, body: unknown) =>
-    new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...CORS } });
-
-  const secret = req.headers.get('x-board-secret') || new URL(req.url).searchParams.get('secret');
-  if (secret !== env.WEBHOOK_SECRET) {
+  if (!boardAuthed(req, env)) {
     return jsonRes(401, { ok: false, error: 'forbidden' });
   }
 
@@ -185,6 +200,58 @@ async function handleAddApi(req: Request, env: Env): Promise<Response> {
   } catch (e: any) {
     return jsonRes(502, { ok: false, error: e.message || String(e) });
   }
+}
+
+// 보드에서 카드 내용 수정 — 회사명/카테고리/설명을 노루군이 직접 고침.
+// 수동 확정이므로 confidence=1(=신뢰도 확정), classified_by='manual'로 올린다.
+async function handleUpdateApi(req: Request, env: Env): Promise<Response> {
+  if (!boardAuthed(req, env)) return jsonRes(401, { ok: false, error: 'forbidden' });
+
+  let body: any;
+  try {
+    body = await req.json();
+  } catch {
+    return jsonRes(400, { ok: false, error: 'invalid json' });
+  }
+  const id = String(body?.id || '').trim();
+  if (!id) return jsonRes(400, { ok: false, error: 'id가 없어' });
+
+  const { data, sha } = await getDataFile(env);
+  const entry = data.items.find((it) => it.id === id);
+  if (!entry) return jsonRes(404, { ok: false, error: '해당 항목을 못 찾았어' });
+
+  if (typeof body.company === 'string' && body.company.trim()) entry.company = body.company.trim().slice(0, 120);
+  if (typeof body.category === 'string' && body.category.trim()) entry.category = body.category.trim().slice(0, 40);
+  if (typeof body.desc_ko === 'string') entry.desc_ko = body.desc_ko.trim().slice(0, 300);
+  entry.confidence = 1;
+  entry.classified_by = 'manual';
+
+  data.updated_at = new Date().toISOString();
+  await putDataFile(env, data, sha, `edit: ${id} -> ${entry.company}`);
+  return jsonRes(200, { ok: true, entry });
+}
+
+// 보드에서 카드 삭제
+async function handleDeleteApi(req: Request, env: Env): Promise<Response> {
+  if (!boardAuthed(req, env)) return jsonRes(401, { ok: false, error: 'forbidden' });
+
+  let body: any;
+  try {
+    body = await req.json();
+  } catch {
+    return jsonRes(400, { ok: false, error: 'invalid json' });
+  }
+  const id = String(body?.id || '').trim();
+  if (!id) return jsonRes(400, { ok: false, error: 'id가 없어' });
+
+  const { data, sha } = await getDataFile(env);
+  const before = data.items.length;
+  data.items = data.items.filter((it) => it.id !== id);
+  if (data.items.length === before) return jsonRes(404, { ok: false, error: '해당 항목을 못 찾았어' });
+
+  data.updated_at = new Date().toISOString();
+  await putDataFile(env, data, sha, `delete: ${id}`);
+  return jsonRes(200, { ok: true });
 }
 
 async function addSourceFlow(url: string, chatId: number, userId: number, tg: TelegramAPI, env: Env): Promise<void> {
