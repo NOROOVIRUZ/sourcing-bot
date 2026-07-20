@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-20T13:19:51.246Z",
+  "updated_at": "2026-07-20T13:19:54.830Z",
   "items": [
+    {
+      "id": "www-alibaba-com-mrt94udq",
+      "url": "https://www.alibaba.com/product-detail/Multiple-Colorful-Round-Rope-Pet-Dog_1601466793032.html?spm=a2700.prosearch.normal_offer.d_image.12a167afRT4iKp&priceId=246e11cc970d421f8f9203d2f2ca2945",
+      "domain": "www.alibaba.com",
+      "company": "Multiple Colorful Round Rope Pet Dog",
+      "desc_ko": "Multiple Colorful Round Rope Pet Dog (URL 기반 추정)",
+      "category": "애견",
+      "confidence": 0.4,
+      "classified_by": "manual",
+      "saved_at": "2026-07-20T13:19:54.830Z",
+      "added_by": "board",
+      "notes": null
+    },
     {
       "id": "hozi-co-kr-mrt6kty4",
       "url": "https://hozi.co.kr",
