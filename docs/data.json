@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-20T13:19:54.830Z",
+  "updated_at": "2026-07-20T13:48:45.521Z",
   "items": [
     {
       "id": "www-alibaba-com-mrt94udq",
@@ -32,10 +32,10 @@
       "id": "www-alibaba-com-mrt5smq5",
       "url": "https://www.alibaba.com/x/18R9Tc?ck=pdp",
       "domain": "www.alibaba.com",
-      "company": "www.alibaba.com",
-      "desc_ko": "",
-      "category": "미분류",
-      "confidence": 0,
+      "company": "Hangzhou Baiyi Pet Products Co., Ltd.",
+      "desc_ko": "미국감성",
+      "category": "목줄",
+      "confidence": 1,
       "classified_by": "manual",
       "saved_at": "2026-07-20T11:46:26.189Z",
       "added_by": "telegram:8176674830",
