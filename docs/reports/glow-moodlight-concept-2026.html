@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!-- VUUI 보고서 — _template.html 골격 재사용, 내용만 주입 -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VUUI Glow — 무드등 × 반려견 융합 라인 컨셉 — VUUI</title>
+<style>
+  :root{--warm:#FBF8F2;--ivory:#F6F1E8;--sand:#D8C7AE;--sage:#A8AD9B;--char:#2F2E2A}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:var(--warm);color:var(--char);line-height:1.7}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 24px}
+  header{border-bottom:2px solid var(--sand);padding-bottom:20px;margin-bottom:36px}
+  header .brand{font-size:13px;letter-spacing:3px;color:var(--sage);font-weight:700}
+  header h1{font-size:28px;margin-top:8px}
+  header .meta{font-size:13px;color:#8a857c;margin-top:6px}
+  h2{font-size:20px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--sage)}
+  h3{font-size:16px;margin:24px 0 8px}
+  p,li{font-size:15px}
+  ul,ol{padding-left:22px;margin:8px 0}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;background:#fff}
+  th{background:var(--ivory);text-align:left}
+  th,td{border:1px solid var(--sand);padding:9px 12px}
+  a{color:#7a7f6e}
+  .card{background:#fff;border:1px solid var(--sand);border-radius:10px;padding:18px 20px;margin:14px 0}
+  .tag{display:inline-block;background:var(--sage);color:#fff;font-size:12px;padding:2px 10px;border-radius:99px;margin-right:6px}
+  .lead{font-size:17px;background:var(--ivory);border-radius:10px;padding:18px 20px;margin:8px 0 4px}
+  .kicker{font-size:13px;color:var(--sage);font-weight:700;letter-spacing:1px}
+  .swatch{display:inline-block;width:13px;height:13px;border-radius:3px;border:1px solid rgba(0,0,0,.12);vertical-align:-1px;margin-right:5px}
+  .muted{color:#8a857c;font-size:13px}
+  footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--sand);font-size:12px;color:#8a857c}
+  .src{font-size:12px;color:#8a857c;word-break:break-all}
+  .src a{color:#7a7f6e}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">VUUI · More Connection. Less Noise.</div>
+    <h1>VUUI Glow — 무드등 × 반려견 융합 라인 컨셉</h1>
+    <div class="meta">2026-07-20 · 작성: 최예나(기획)·한수아(리서치)·이서연(디자인) / asuka 취합 · <strong>Phase 4 Living 진입안 v0.1</strong></div>
+  </header>
+
+  <div>
+    <span class="tag">Phase4 Living</span><span class="tag">무드등</span><span class="tag">호지 벤치마크</span><span class="tag">컨셉 기획</span>
+  </div>
+
+  <div class="lead">
+    <span class="kicker">CONCEPT</span><br>
+    <strong>착용하는 프리미엄에서, 함께 사는 공간의 프리미엄으로.</strong><br>
+    사람과 개의 하루 리듬을 조용히 여닫는 <strong>교감 조명.</strong>
+  </div>
+  <p class="muted">호지(HOZI)는 개가 <em>몸에 착용하는</em> 감성 프리미엄을 검증했다. VUUI는 같은 절제된 감성을 개와 사람이 <em>함께 머무는 공간</em>으로 옮긴다. 빛은 공간의 노이즈를 줄이면서(Less Noise) 저녁의 장면을 만들고(More Connection), 반려견의 각성·수면 리듬에 실제로 작용하는 몇 안 되는 물리 매체다. 모토가 그대로 제품 원리가 된다.</p>
+
+  <h2>1. 왜 지금인가 — 세 축의 교집합</h2>
+  <ul>
+    <li><strong>홈 무드등의 생활화.</strong> 집을 꾸미는 소비가 가구에서 빛으로 내려왔다. 무드등은 조명기구를 넘어 <strong>인테리어 오브제</strong>로 인식된다.</li>
+    <li><strong>반려 지출의 성숙.</strong> 용품(소유)에서 관계·공간(라이프스타일)으로 지출이 이동 중. 개를 "가족·룸메이트"로 보는 층이 두꺼워졌다.</li>
+    <li><strong>감성 프리미엄 펫 조명의 공백.</strong> 시중 펫 조명은 저가 야간등이거나 캐릭터·유치한 형태뿐. 호지가 검증한 절제·감성 프리미엄이 집 안 조명에는 아직 비어 있다.</li>
+    <li><strong>로드맵 정합.</strong> VUUI Phase4 Living의 첫 진입점으로 무드등이 정확히 맞물린다. Phase1 Walk(산책)와 Phase4 Living(휴식)을 잇는 자연스러운 다리.</li>
+  </ul>
+
+  <h2>2. 시장 지형 & 빈 자리 <span class="muted">(리서치: 한수아)</span></h2>
+  <table>
+    <tr><th>구간</th><th>대표</th><th>가격</th><th>성격</th></tr>
+    <tr><td>저가·실용</td><td>렉스에너지 강아지 센서 무드등</td><td>16,900원</td><td>USB·밝기조절·인체감지 야간등</td></tr>
+    <tr><td>중가·데코</td><td>IKEA GREJSMOJS 강아지 램프</td><td>$39.99(≈5.5만)</td><td>펫 형상 × 무광 글로우 (대중가 융합 선점)</td></tr>
+    <tr><td>프리미엄·감성</td><td>포풋 반려동물 무드등</td><td>103,000원</td><td>감성 소품형(희소)</td></tr>
+  </table>
+  <p>국내 대량 유통은 <strong>1~3만원대 실용 야간등</strong>에 두껍게 몰려 있고, 감성 프리미엄(10만원+)은 존재하나 희소하다. 해외에선 IKEA가 대중가에서 "펫 형상 × 감성 무드등" 융합을 이미 선점 — VUUI 방향의 <strong>시장 검증이자 경쟁 신호</strong>.</p>
+  <div class="card">
+    <strong>🎯 빈 자리 = VUUI의 자리</strong><br>
+    시장은 ①감성 프리미엄 무드등(전부 사람 대상) ②반려동물 조명(저가 실용·캐릭터) ③분리불안·웰니스 컴패니언(봉제토이·카메라) — 셋으로 갈라져 있고 <strong>교집합이 비었다.</strong> 세 가지를 한 제품에 묶는 것: <strong>감성 디자인 완성도 + 펫 특화 광질(무플리커·색온도) + 분리불안·수면리듬 서사.</strong> IKEA가 대중가 ①을 잡았으니, VUUI는 <strong>10만원대 감성 프리미엄 + 펫 웰니스 근거</strong>로 상단을 노린다.
+  </div>
+
+  <h2>3. 제품 라인업 4종 <span class="muted">(기획: 최예나)</span></h2>
+  <p class="muted">모든 조명 기능은 반려견과의 관계·리듬에서 파생된다. 개를 형상화하지 않고, 기능을 위한 기능을 붙이지 않는다.</p>
+
+  <div class="card">
+    <span class="tag">①</span><strong>VUUI Threshold — 현관 거치 겸용 귀가등</strong>
+    <p>리드·하네스를 거는 월넛 훅에 무드등을 통합. 나갈 땐 밝아지고, 돌아와 걸면 저녁 웜톤으로 내려앉는 전이 조명.</p>
+    <p class="muted"><strong>교감:</strong> 리드를 떼면 출발, 걸면 귀가 — 개와 사람이 공유하는 '문턱의 리추얼'. <strong>왜 VUUI:</strong> Phase1 Walk와 Phase4 Living을 물리적으로 잇는 유일한 접점 제품.</p>
+  </div>
+  <div class="card">
+    <span class="tag">②</span><strong>VUUI Lull — 반려견 잠자리 리듬 웜라이트</strong>
+    <p>저녁엔 색온도를 완만히 낮춰 수면을 돕고, 아침엔 부드럽게 밝아지는 자리 곁 조명. 점멸·알람 없이 조도의 결만 변한다.</p>
+    <p class="muted"><strong>교감:</strong> 개와 사람이 같은 빛 리듬 안에서 하루를 닫고 연다(Habit·Comfort). <strong>왜 VUUI:</strong> 요란한 앱 알림 없이 빛 자체로만 신호 — Less Noise의 물리 구현.</p>
+  </div>
+  <div class="card">
+    <span class="tag">③</span><strong>VUUI Cue — 소리 없는 루틴 알림 조명</strong>
+    <p>급식·산책·투약 시간을 소리 대신 은은한 밝기 변화로 알리는 루틴 조명.</p>
+    <p class="muted"><strong>교감:</strong> 소리 알람은 개를 흥분·불안하게 한다. 빛으로 대체해 사람이 먼저 알아채고 함께 움직인다(Habit·Trust). <strong>주의:</strong> 핵심은 '조용함' — 다기능 스마트등이 되면 정체성이 무너진다.</p>
+  </div>
+  <div class="card">
+    <span class="tag">④</span><strong>VUUI Dusk — 저녁 휴식 오브제 조명</strong>
+    <p>사람이 책 읽고 개가 곁에 엎드린 저녁을 위한, 개 눈에도 자극 적은 저색온·저플리커 간접광 테이블/플로어 조명.</p>
+    <p class="muted"><strong>교감:</strong> 특정 기능이 아니라 '함께 있는 저녁'이라는 장면 자체를 위한 오브제. <strong>왜 VUUI:</strong> 승마 안장·재갈의 절제된 곡선을 셰이드로 번역한 호지식 오브제 감성(Everyday·Calm).</p>
+  </div>
+
+  <h2>4. 디자인 컨셉 <span class="muted">(디자인: 이서연)</span></h2>
+  <h3>색온도 · 광질 — 2,200K~2,700K 웜디밍</h3>
+  <ul>
+    <li><strong>웜디밍(warm dimming):</strong> 밝기를 낮추면 색온도도 함께 내려간다(2,700K→2,200K). 백열등이 꺼져가듯 자연스러운 감광 — 디지털 조명의 '차갑게 어두워지는' 느낌 배제.</li>
+    <li><strong>왜 이 온도인가:</strong> 저색온(호박빛)은 청색광이 적어 사람의 수면 리듬을 덜 방해하고, 반려견은 청·황 위주 색각이라 <strong>웜/앰버가 저자극</strong>. "사람에게도 개에게도 진정되는 빛"이 이 라인의 핵심 논리.</li>
+    <li><strong>무점광원 전면 확산:</strong> 패브릭 셰이드로 LED 점(hotspot)을 소거, 공간에 '번지게'. 어느 각도에서도 광원이 직접 보이지 않는 <strong>글레어 프리</strong> — 바닥에 앉은 개의 눈높이에서도 자극 없음.</li>
+    <li><strong>무(無)플리커 · CRI Ra 90+:</strong> 개·고양이는 깜박임에 민감(스트레스) → 무플리커·디밍이 펫 조명의 실질 차별점이자 <strong>프리미엄 명분</strong>. (수아 리서치와 정합)</li>
+    <li><strong>브리딩 라이트(옵션):</strong> 약 6초 주기의 느린 밝기 호흡으로 야간·분리불안 완화. 과장 없이 '숨 쉬듯' 미세하게만.</li>
+  </ul>
+  <h3>컬러 — 발광면은 웜화이트 고정, 색은 오브제 상태로만</h3>
+  <table>
+    <tr><th>파트</th><th>소재</th><th>VUUI 컬러</th></tr>
+    <tr><td>셰이드(발광면)</td><td>Fabric</td><td><span class="swatch" style="background:#FBF8F2"></span>Warm White #FBF8F2</td></tr>
+    <tr><td>베이스</td><td>Natural Wood</td><td><span class="swatch" style="background:#D8C7AE"></span>Sand Beige #D8C7AE</td></tr>
+    <tr><td>셰이드 변형</td><td>Fabric</td><td><span class="swatch" style="background:#A8AD9B"></span>Sage #A8AD9B</td></tr>
+    <tr><td>그라운딩</td><td>—</td><td><span class="swatch" style="background:#2F2E2A"></span>Charcoal #2F2E2A</td></tr>
+    <tr><td>포인트(5% 미만)</td><td>Brushed Stainless</td><td><span class="swatch" style="background:#b8bcc0"></span>무채 실버</td></tr>
+  </table>
+  <p class="muted"><strong>기본 조합:</strong> 웜화이트 패브릭 셰이드 × 샌드베이지 원목 베이스 × 브러시드 스테인리스 링. 켜면 셰이드가 웜 크림색으로 발광. 발광면은 웜화이트/아이보리로 고정하고, 색은 셰이드 베리에이션과 원목·차콜의 <strong>꺼졌을 때 오브제 상태로만</strong> 준다. 채도 있는 자극색 금지.</p>
+  <h3>소재 · 폼</h3>
+  <ul>
+    <li><strong>Fabric(셰이드):</strong> 리넨/코튼 매트 직조. <strong>탈착·세탁 가능</strong>(반려 환경 위생 — 털·냄새 대응).</li>
+    <li><strong>Natural Wood(베이스):</strong> 오크/애쉬 오일 매트, 라운드 엣지. <strong>저중심·중량 안정</strong>으로 개가 스쳐도 안 넘어지는 로우 프로파일.</li>
+    <li><strong>Brushed Stainless(포인트):</strong> 넥/조인트 얇은 링 또는 터치 디밍 지점 한 곳만. 절대 주인공 아님.</li>
+    <li><strong>형태:</strong> 완만한 돔 / 조약돌 / 씨앗형 타원체. "웅크리고 잠든 개의 둥근 등"을 <strong>은유로만</strong> 차용(형상 직역 금지). 셰이드-베이스는 하나의 연속 곡률.</li>
+  </ul>
+
+  <h2>5. 포지셔닝</h2>
+  <table>
+    <tr><th>축</th><th>자리</th></tr>
+    <tr><td>러프웨어</td><td>몸에 착용하는 <strong>아웃도어 기능</strong> 프리미엄</td></tr>
+    <tr><td>호지</td><td>몸에 착용하는 <strong>도심 패션·감성</strong> 프리미엄</td></tr>
+    <tr><td>일반 펫 조명</td><td>기능(야간등)·캐릭터 형태, 감성 부재</td></tr>
+    <tr><td><strong>VUUI</strong></td><td><strong>함께 사는 공간에 조용히 녹아들어, 사람과 개의 하루 리듬을 여닫는 교감 조명</strong></td></tr>
+  </table>
+  <p class="muted">벤치마크 둘은 "개가 입는 것"에 머문다. VUUI는 착용에서 <strong>공간(Living)</strong>으로 축을 옮겨 빈자리를 선점한다. 디자인 언어 한 줄: <em>착용·활동의 언어가 아니라, 집·자연광·휴식의 언어. 개를 '꾸미는' 대신 같은 공간에서 함께 쉬게 하는 결.</em></p>
+
+  <h2>6. 타깃 · 가격대</h2>
+  <p><strong>타깃:</strong> 도심 아파트·오피스텔 1~2인 가구 + 반려견, 30~40대. 인테리어·라이프스타일 소비에 익숙하고 호지·러프웨어를 이미 인지하는 감성 프리미엄 수용층. 반려견을 '가족·룸메이트'로 인식하며 함께 있는 시간의 질에 지불하는 층.</p>
+  <table>
+    <tr><th>제품군</th><th>가격대(제안)</th></tr>
+    <tr><td>소형(Threshold·Cue)</td><td>5~8만원대</td></tr>
+    <tr><td>메인 무드등(Lull·Dusk)</td><td>9~15만원대</td></tr>
+  </table>
+  <p class="muted"><strong>근거:</strong> 호지 하네스 3.2~5.4만원이 감성 프리미엄 지불의사의 앵커. 조명은 전자부품·마감·부피가 더해져 그 위 구간이 자연스럽다. 프리미엄은 <strong>소재(패브릭·원목·스테인리스)와 무플리커·리듬 기능으로 정당화</strong> — 근거 없는 가격 인상은 금지선(이유 없는 프리미엄) 위반.</p>
+
+  <h2>7. 리스크 · 실행 제안</h2>
+  <div class="card">
+    <strong>⚠️ 금지선 충돌 지점 (What We Don't Do)</strong>
+    <ul>
+      <li><strong>불필요한 기능화:</strong> Lull·Cue의 리듬/알림이 스마트홈 다기능으로 부풀면 위반. 앱 최소, 신호는 빛 하나로. "빛으로만 조용히"가 무너지면 Cue는 존재 이유를 잃는다.</li>
+      <li><strong>불안 마케팅 금지:</strong> 수면·건강을 "안 하면 개가 힘들다"로 팔지 않는다. '돕는다' 톤 유지. 의학적 효능 단정은 클레임·과장 광고 리스크.</li>
+      <li><strong>귀여움만 금지:</strong> 개 형상·캐릭터 조명으로 흐르면 브랜드 붕괴. 오브제는 절대 개를 형상화하지 않는다.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <strong>🏭 OEM 실현성</strong>
+    <ul>
+      <li><strong>공급망:</strong> LED 드라이버·색온도 제어·플리커프리·발열·KC/전안법 인증이 걸린다. 기존 패브릭·워킹 벤더로 불가 → <strong>조명 전문 ODM 별도 발굴 필수.</strong></li>
+      <li><strong>난도 차등:</strong> 색온도 가변·타이머·저플리커는 기성 모듈로 구현 가능(낮은 리스크). ①Threshold의 리드 거치+전기 결합은 구조·하중·안전이 얽혀 최상 난도.</li>
+      <li><strong>반려 안전 최저선:</strong> 코드 물어뜯기·전도·발열 화상 대비 → 무선/저전압·코드리스, 안정적 무게중심, 저발열을 스펙 하한으로 고정.</li>
+    </ul>
+  </div>
+  <p><strong>✅ 실행 제안 — 출시 순서:</strong> MVP는 단순 웜라이트인 <strong>④Dusk · ②Lull 선행</strong>(기성 모듈로 리스크 낮음, 조명 인증 리드타임 확보), 결합·알림형 <strong>①Threshold · ③Cue는 2차.</strong> 가격 방어의 핵심은 데코 단독이 아니라 <strong>분리불안·야간 안심·무플리커 등 기능 정당화.</strong></p>
+
+  <h2>출처</h2>
+  <p class="src">
+    · <a href="https://ohou.se/productions/feed?query=강아지무드등">오늘의집 강아지무드등 148개</a><br>
+    · <a href="https://m.danawa.com/product/product.html?code=93380618">다나와 강아지 센서 무드등 16,900원</a><br>
+    · <a href="https://www.aol.com/dog-shaped-ikea-lamp-creates-025500551.html">IKEA GREJSMOJS 강아지 램프 $39.99</a><br>
+    · <a href="https://swingtail.peoplead.kr/shop/item.php?it_id=1703733777">포풋 반려동물 무드등 103,000원</a><br>
+    · <a href="https://www.petacoustics.com/blog/does-light-therapy-work-for-pets">반려동물 광선요법(라이트테라피)</a><br>
+    · <a href="http://www.theliving.co.kr/news/articleView.html?idxno=21307">펫테리어 조명 팁 · 무플리커</a> ·
+      <a href="https://www.lxzin.com/styling/style-trend/detail/5247">LX Z:IN 펫테리어</a> ·
+      <a href="https://richpet.kr/article/정보리치/1002/177/">2025 반려동물 산업 트렌드</a><br>
+    · 디자인 레퍼런스: <a href="https://www.louispoulsen.com">Louis Poulsen</a> ·
+      <a href="https://www.vitra.com">Noguchi Akari(Vitra)</a> ·
+      <a href="https://www.marset.com">Marset</a> · Le Klint · MUJI
+  </p>
+  <p class="muted">⚠️ 심화 필요(수아): 국내 반려동물 조명 시장규모 정량·프리미엄 펫 조명 구매 전환/리뷰 볼륨. 노루군이 "심화" 지시 시 예산 확장 조사.</p>
+
+  <footer>VUUI Internal Report · Phase 4 Living 진입안 v0.1 · 2026-07-20 · 본 문서의 비교·분석 항목에는 출처 URL 첨부 필수</footer>
+</div>
+</body>
+</html>

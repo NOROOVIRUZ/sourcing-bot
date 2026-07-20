@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "reports": [
+    {
+      "id": "glow-moodlight-2026",
+      "title": "VUUI Glow — 무드등 × 반려견 융합 라인 컨셉",
+      "requested_at": "2026-07-20",
+      "created_at": "2026-07-20",
+      "file": "./reports/glow-moodlight-concept-2026.html",
+      "author": "예나·수아·서연",
+      "tags": ["무드등", "Phase4 Living", "호지 벤치마크", "신제품기획"],
+      "summary": "호지풍 감성 프리미엄을 착용에서 공간(조명)으로. 라인 4종(Threshold·Lull·Cue·Dusk), 웜디밍·무플리커 근거, 10만원대 감성 프리미엄 빈자리 공략."
+    }
+  ]
+}

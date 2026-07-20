@@ -15,6 +15,7 @@ const SECRET_KEY = 'vuui_board_secret';
 
 const state = {
   items: [],
+  reports: [],
   filter: { search: '', category: 'all' },
   sort: 'saved_desc',
   editingId: null,
@@ -53,6 +54,16 @@ async function loadData() {
     console.error('데이터 로드 실패', e);
     document.getElementById('mainContent').innerHTML =
       '<div class="empty-state"><div class="empty-title">데이터를 불러올 수 없어</div></div>';
+  }
+}
+
+async function loadReports() {
+  try {
+    const res = await fetch(`./reports.json?v=${Date.now()}`);
+    const data = await res.json();
+    state.reports = data.reports || [];
+  } catch (e) {
+    state.reports = [];
   }
 }
 
@@ -201,6 +212,58 @@ function renderHeaderStats() {
   document.getElementById('brandStats').textContent = `저장된 링크 ${state.items.length}개`;
 }
 
+// ===== 보고서 탭 =====
+function renderReportCard(r) {
+  const tags = (r.tags || []).map((t) => `<span class="report-tag">${escapeHtml(t)}</span>`).join('');
+  return `
+    <article class="report-card" data-file="${escapeHtml(r.file)}">
+      <div class="report-dates">
+        <span>요청 <b>${escapeHtml(r.requested_at || '—')}</b></span>
+        <span class="report-dot">·</span>
+        <span>생성 <b>${escapeHtml(r.created_at || '—')}</b></span>
+      </div>
+      <h3 class="report-title">${escapeHtml(r.title)}</h3>
+      <div class="report-summary">${escapeHtml(r.summary) || ''}</div>
+      <div class="report-foot">
+        <div class="report-tags">${tags}</div>
+        ${r.author ? `<span class="report-author">${escapeHtml(r.author)}</span>` : ''}
+      </div>
+    </article>
+  `;
+}
+
+function renderReports() {
+  const list = document.getElementById('reportList');
+  const empty = document.getElementById('reportEmpty');
+  document.getElementById('reportCount').textContent = `${state.reports.length}개`;
+  if (!state.reports.length) {
+    list.innerHTML = '';
+    empty.hidden = false;
+    return;
+  }
+  empty.hidden = true;
+  const sorted = [...state.reports].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  list.innerHTML = `<div class="report-grid">${sorted.map(renderReportCard).join('')}</div>`;
+  list.querySelectorAll('.report-card').forEach((el, i) => el.style.setProperty('--i', Math.min(i, 12)));
+}
+
+function bindTabs() {
+  const tabbar = document.getElementById('tabbar');
+  tabbar.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab');
+    if (!btn) return;
+    const tab = btn.dataset.tab;
+    tabbar.querySelectorAll('.tab').forEach((t) => t.classList.toggle('active', t === btn));
+    document.getElementById('tab-sourcing').hidden = tab !== 'sourcing';
+    document.getElementById('tab-reports').hidden = tab !== 'reports';
+    if (tab === 'reports') renderReports();
+  });
+  document.getElementById('reportList').addEventListener('click', (e) => {
+    const card = e.target.closest('.report-card');
+    if (card) window.open(card.dataset.file, '_blank', 'noopener');
+  });
+}
+
 // ===== 액션 =====
 async function submitEdit(form) {
   const id = form.dataset.id;
@@ -309,6 +372,7 @@ function bindEvents() {
 
   bindAddForm();
   bindMainDelegation();
+  bindTabs();
 
   input.addEventListener('input', () => {
     state.filter.search = input.value;
@@ -329,7 +393,7 @@ function bindEvents() {
 }
 
 (async function init() {
-  await loadData();
+  await Promise.all([loadData(), loadReports()]);
   bindEvents();
   renderHeaderStats();
   render();

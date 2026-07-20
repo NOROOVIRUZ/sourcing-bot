@@ -1,4 +1,11 @@
-# CHANGELOG — VUUI 개발보드 (sourcing-bot)
+# CHANGELOG — VUUI Archive (sourcing-bot)
+
+## v5 — 2026-07-20
+- **VUUI Archive로 리브랜딩** — 타이틀 "VUUI 개발보드" → "VUUI Archive" (화면만; repo·워커 이름 sourcing-bot 유지, webhook 재등록 회피)
+- **탭 UI 추가**: [Sourcing] / [Reports] 세그먼트 탭 (애플 세그먼트 컨트롤 스타일)
+- **보고서(Reports) 탭 신설** — `docs/reports.json` 기반 보고서 목록: 요청일·생성일·제목·요약·태그·작성자, 카드 클릭 시 새 탭으로 열림
+- VUUI Glow 무드등 기획서를 vuui-dashboard에서 소싱봇 `docs/reports/`로 가져와 첫 보고서로 등록 (앞으로 팀 보고서는 여기 통합 관리)
+- 검색 키워드: VUUI Archive 탭 보고서 reports.json Sourcing Reports 리브랜딩 통합관리
 
 ## v4 — 2026-07-20
 - URL 주소에서 제품명 자동 추출: 알리바바 product-detail 링크가 캡차로 본문이 막혀도 URL 경로의 제품명 slug를 뽑아 분류 (www.alibaba.com → "Multiple Colorful Round Rope Pet Dog" + 애견 자동, 실측 확인)

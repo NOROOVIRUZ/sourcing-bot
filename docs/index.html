@@ -4,55 +4,73 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#000000" />
-  <title>VUUI 개발보드</title>
+  <title>VUUI Archive</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <main class="container">
     <section class="hero">
-      <h1 class="hero-title">VUUI 개발보드</h1>
+      <h1 class="hero-title">VUUI Archive</h1>
       <div class="hero-sign">MADE BY NOROOVIRUS</div>
-      <p class="hero-desc">VUUI 프로젝트 관리 · 텔레그램으로 링크 보내면 자동 분류</p>
+      <p class="hero-desc">소싱 링크와 팀 보고서를 한곳에</p>
       <div class="hero-stats" id="brandStats">—</div>
     </section>
 
-    <section class="add-section">
-      <form id="addForm" class="add-box">
-        <input id="addInput" type="url" placeholder="링크 붙여넣고 Enter — 바로 저장돼" autocomplete="off" required />
-        <button id="addBtn" type="submit">저장</button>
-      </form>
-      <div class="add-status" id="addStatus" hidden></div>
-    </section>
+    <nav class="tabbar" id="tabbar">
+      <button class="tab active" data-tab="sourcing">Sourcing</button>
+      <button class="tab" data-tab="reports">Reports</button>
+    </nav>
 
-    <section class="search-section">
-      <div class="search-box">
-        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
-        <input id="searchInput" type="search" placeholder="업체 · 설명 · 카테고리 검색" autocomplete="off" />
-        <button id="clearSearch" class="clear-btn" aria-label="검색 지우기" hidden>✕</button>
+    <!-- ===== 소싱함 탭 ===== -->
+    <div id="tab-sourcing">
+      <section class="add-section">
+        <form id="addForm" class="add-box">
+          <input id="addInput" type="url" placeholder="링크 붙여넣고 Enter — 바로 저장돼" autocomplete="off" required />
+          <button id="addBtn" type="submit">저장</button>
+        </form>
+        <div class="add-status" id="addStatus" hidden></div>
+      </section>
+
+      <section class="search-section">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
+          <input id="searchInput" type="search" placeholder="업체 · 설명 · 카테고리 검색" autocomplete="off" />
+          <button id="clearSearch" class="clear-btn" aria-label="검색 지우기" hidden>✕</button>
+        </div>
+        <div class="sort-box">
+          <select id="sortSelect">
+            <option value="saved_desc">최근 저장순</option>
+            <option value="name_asc">이름순</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <div class="chip-row" id="categoryChips"></div>
+      </section>
+
+      <div class="result-info" id="resultCount">0개</div>
+
+      <section id="mainContent"></section>
+      <div class="empty-state" id="emptyState" hidden>
+        <div class="empty-title">저장된 링크가 없어</div>
+        <div class="empty-sub">텔레그램 봇에 사이트 링크를 보내봐</div>
       </div>
-      <div class="sort-box">
-        <select id="sortSelect">
-          <option value="saved_desc">최근 저장순</option>
-          <option value="name_asc">이름순</option>
-        </select>
+    </div>
+
+    <!-- ===== 보고서 탭 ===== -->
+    <div id="tab-reports" hidden>
+      <div class="result-info" id="reportCount">0개</div>
+      <section id="reportList"></section>
+      <div class="empty-state" id="reportEmpty" hidden>
+        <div class="empty-title">보고서가 없어</div>
+        <div class="empty-sub">팀이 만든 보고서가 여기에 쌓여</div>
       </div>
-    </section>
-
-    <section class="filter-section">
-      <div class="chip-row" id="categoryChips"></div>
-    </section>
-
-    <div class="result-info" id="resultCount">0개</div>
-
-    <section id="mainContent"></section>
-    <div class="empty-state" id="emptyState" hidden>
-      <div class="empty-title">저장된 링크가 없어</div>
-      <div class="empty-sub">텔레그램 봇에 사이트 링크를 보내봐</div>
     </div>
   </main>
 
   <footer class="app-footer">
-    <span>made by <strong>noroovirus</strong> · v4</span>
+    <span>made by <strong>noroovirus</strong> · v5</span>
   </footer>
 
   <script src="./app.js"></script>
