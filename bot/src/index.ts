@@ -1,7 +1,7 @@
 import type { Env, SourceEntry } from './types';
 import { TelegramAPI } from './telegram';
 import { getDataFile, putDataFile, getCategories } from './github';
-import { fetchPageMeta, classify, hasEnoughSignal } from './classifier';
+import { fetchPageMeta, classify, hasEnoughSignal, extractProductSlug, guessCategory } from './classifier';
 
 const DASHBOARD_URL = 'https://norooviruz.github.io/sourcing-bot/';
 
@@ -134,13 +134,16 @@ async function saveSource(
   const NOT_STORES = new Set(['www', 'x', 'm', 'sale', 'activity', 'message', 'login', 'passport']);
   const storeName = storeMatch && !NOT_STORES.has(storeMatch[1].toLowerCase()) ? storeMatch[1] : null;
 
+  // 본문이 캡차로 막혀도 알리바바 product-detail URL엔 제품명이 박혀있음 — 주소에서 뽑는다
+  const slug = extractProductSlug(meta.finalUrl) || extractProductSlug(url);
+
   const id = `${finalDomain.replace(/\./g, '-')}-${Date.now().toString(36)}`;
 
   const entry: SourceEntry = {
     id, url,
     domain: finalDomain,
-    company: (meta.title || meta.ogTitle || (storeName ? `${storeName} (알리바바 스토어)` : finalDomain)).slice(0, 120),
-    desc_ko: meta.ogDesc || meta.metaDesc || '',
+    company: (meta.title || meta.ogTitle || (storeName ? `${storeName} (알리바바 스토어)` : (slug || finalDomain))).slice(0, 120),
+    desc_ko: meta.ogDesc || meta.metaDesc || (slug ? `${slug} (URL 기반 추정)` : ''),
     category: '미분류',
     confidence: 0,
     classified_by: 'manual',
@@ -150,7 +153,7 @@ async function saveSource(
   };
 
   let aiNote = '';
-  if (hasEnoughSignal(meta)) {
+  if (hasEnoughSignal(meta) || slug) {
     try {
       const categories = await getCategories(env);
       const result = await classify(env, url, meta, categories);
@@ -160,10 +163,17 @@ async function saveSource(
       entry.confidence = result.confidence;
       entry.classified_by = 'ai';
     } catch {
-      aiNote = `AI 분류는 실패해서 페이지 제목으로만 저장 — /분류 ${id} <카테고리> <설명> 으로 수정 가능`;
+      if (slug) {
+        // Gemini 무키/실패 — URL 제품명만이라도 살려 저장 (www.alibaba.com보다 훨씬 나음)
+        entry.category = guessCategory(slug) || '미분류';
+        entry.confidence = 0.4;
+        aiNote = `URL 주소에서 제품명 추출(본문은 차단). 카테고리 확인해줘 — 대시보드 [수정] 또는 /분류 ${id} <카테고리> <설명>`;
+      } else {
+        aiNote = `AI 분류는 실패해서 페이지 제목으로만 저장 — /분류 ${id} <카테고리> <설명> 으로 수정 가능`;
+      }
     }
   } else {
-    aiNote = `사이트가 안 읽혀서 링크만 저장 — 차단/캡차 가능성. /분류 ${id} <카테고리> <설명> 으로 수정 가능`;
+    aiNote = `사이트가 안 읽혀서 링크만 저장 — 차단/캡차 가능성. 대시보드 [수정] 또는 /분류 ${id} <카테고리> <설명>`;
   }
 
   data.items.unshift(entry);

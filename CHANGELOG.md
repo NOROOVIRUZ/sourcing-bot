@@ -1,5 +1,12 @@
 # CHANGELOG — VUUI 개발보드 (sourcing-bot)
 
+## v4 — 2026-07-20
+- URL 주소에서 제품명 자동 추출: 알리바바 product-detail 링크가 캡차로 본문이 막혀도 URL 경로의 제품명 slug를 뽑아 분류 (www.alibaba.com → "Multiple Colorful Round Rope Pet Dog" + 애견 자동, 실측 확인)
+- Gemini 키 있으면 slug를 근거로 회사명·카테고리·한글설명 추론(코덱스식 URL 추론), 키 없어도 slug+키워드로 카테고리 자동 추정(confidence 0.4 → "확인 필요" 배지 유지, 노루군이 최종 확정)
+- classifier: extractProductSlug()·guessCategory() 추가, /product-detail/<slug>_<id>.html + /p|pd|products/ 패턴, subject 같은 쓰레기 slug 필터. 단축링크(/x/)는 리다이렉트 최종 URL에서 slug 시도
+- 한계: product-detail URL엔 공장명이 없어 제품명만 자동(공장명 자동은 스토어 서브도메인 링크일 때만). 정확한 회사명은 대시보드 [수정]으로 확정
+- 검색 키워드: URL slug 제품명 자동분류 alibaba product-detail 캡차 우회 코덱스 extractProductSlug guessCategory
+
 ## v3 — 2026-07-20
 - 대시보드 카드 직접 수정/삭제 기능 추가 — 카드에 마우스 올리면 [수정]/[삭제] 버튼(터치 기기는 항상 노출). 보드키(x-board-secret) 인증 재사용
 - 수정 = 회사·공장명 + 카테고리 + 설명을 인라인 폼에서 편집 (텔레그램 /분류는 회사명을 못 고쳤음 — 이걸 해결). 카테고리는 기존 값 자동완성(datalist)

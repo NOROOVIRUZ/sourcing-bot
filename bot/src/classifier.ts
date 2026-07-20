@@ -25,6 +25,38 @@ export function hasEnoughSignal(meta: PageMeta): boolean {
   return Boolean(meta.title || meta.ogTitle || meta.ogDesc || meta.metaDesc);
 }
 
+// 알리바바 등 product-detail URL 경로에 제품명이 slug로 박혀있음 — 본문이 캡차로 막혀도 주소는 읽힘.
+// /product-detail/Multiple-Colorful-Round-Rope-Pet-Dog_1601...html -> "Multiple Colorful Round Rope Pet Dog"
+const JUNK_SLUG_WORD = new Set(['subject', 'product', 'detail', 'index', 'item', 'goods', 'wholesale', 'china']);
+export function extractProductSlug(url: string): string {
+  let path = '';
+  try {
+    path = decodeURIComponent(new URL(url).pathname);
+  } catch {
+    return '';
+  }
+  const m = path.match(/\/product-detail\/(.+?)(?:_[a-z0-9]+)?\.html/i) || path.match(/\/(?:p|pd|products?)\/([^/]+)/i);
+  if (!m) return '';
+  const words = m[1]
+    .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter((w) => /[a-zA-Zㄱ-힝]{2,}/.test(w) && !JUNK_SLUG_WORD.has(w.toLowerCase()));
+  return words.length >= 2 ? words.join(' ') : ''; // 'subject' 하나짜리 쓰레기 slug는 버림
+}
+
+// AI 없이 URL 제품명만으로 카테고리 추정 (VUUI 도메인 = 애견 중심). 못 맞추면 null.
+const CATEGORY_KEYWORDS: Array<[string, RegExp]> = [
+  ['애견', /\b(dog|pet|puppy|cat|leash|collar|harness|kennel|paw|canine|pooch)\b/i],
+  ['주방가전', /\b(kitchen|blender|toaster|oven|cookware|coffee)\b/i],
+  ['미용가전', /\b(hair|dryer|beauty|trimmer|shaver|grooming)\b/i],
+];
+export function guessCategory(text: string): string | null {
+  for (const [cat, re] of CATEGORY_KEYWORDS) if (re.test(text)) return cat;
+  return null;
+}
+
 // 사이트가 JS로만 렌더돼도 og:title/description은 SNS 공유용이라 서버 HTML에 보통 박혀있음 — 브라우저 렌더링 없이 plain fetch로 충분
 export async function fetchPageMeta(url: string): Promise<PageMeta> {
   const res = await fetch(url, {
@@ -95,18 +127,25 @@ export async function classify(env: Env, url: string, meta: PageMeta, categories
     .map((c) => `- ${c.label}: ${c.description}`)
     .join('\n');
 
+  // 본문이 캡차로 막혀도 알리바바 product-detail URL엔 제품명이 박혀있음 — 그걸 추론 근거로 넘긴다
+  const slug = extractProductSlug(meta.finalUrl) || extractProductSlug(url);
+
   const systemPrompt =
     '너는 소싱 담당자를 돕는 분류 도우미다. 업체/제품 사이트 링크 하나를 보고 ' +
     '(1) 회사/공장명(마켓플레이스명·"Wholesale" 같은 광고문구는 빼고 실제 업체명만), ' +
     '(2) 이미 있는 카테고리 중 가장 알맞은 것, ' +
     '(3) 어떤 제품/업체인지 한국어 1문장 짧은 설명을 뽑는다. 회사명이 안 보이면 도메인을 그대로 써라. ' +
+    '페이지 본문이 비어있어도 URL에 박힌 제품명이 있으면 그걸로 카테고리와 설명을 추론하라 ' +
+    '(예: "Colorful Round Rope Pet Dog" -> 카테고리 애견, 설명 "강아지 로프 목줄"). ' +
+    '이 경우 회사명은 알 수 없으니 제품명을 한국어로 옮겨 넣고 confidence는 0.4 이하로 낮춰라. ' +
     '반드시 지정된 JSON 스키마로만 답한다.';
 
   const userPrompt =
-    `[URL]\n${url} (도메인: ${domain})\n\n` +
-    `[페이지 정보]\n제목: ${meta.title || meta.ogTitle || '(없음)'}\n` +
+    `[URL]\n${url} (도메인: ${domain})\n` +
+    (slug ? `[URL에 박힌 제품명]\n${slug}\n` : '') +
+    `\n[페이지 정보]\n제목: ${meta.title || meta.ogTitle || '(없음, 차단 가능성)'}\n` +
     `og:description: ${meta.ogDesc || '(없음)'}\nmeta description: ${meta.metaDesc || '(없음)'}\n` +
-    `본문 일부: ${meta.bodyText || '(추출 안 됨)'}\n\n` +
+    `본문 일부: ${meta.bodyText || '(추출 안 됨 — 캡차/차단)'}\n\n` +
     `[카테고리 목록]\n${catList}\n\n` +
     `[규칙]\n${Object.values(categories.rules).join('\n')}\n\n` +
     '반드시 아래 JSON 스키마로만 출력하라. 설명·인사·마크다운 금지:\n' +
