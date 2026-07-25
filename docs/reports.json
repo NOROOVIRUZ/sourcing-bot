@@ -2,6 +2,16 @@
   "version": 1,
   "reports": [
     {
+      "id": "import-sourcing-walk-2026",
+      "title": "Walk 수입 소싱 가이드 — 탐색 지원 자료",
+      "requested_at": "2026-07-25",
+      "created_at": "2026-07-25",
+      "file": "./reports/import-sourcing-walk-2026.html",
+      "author": "원영·지영 (asuka 취합)",
+      "tags": ["수입", "소싱", "1688", "HS코드", "Phase1 Walk"],
+      "summary": "노루군 직접 탐색용 참고서. 하네스 도매 $2.3~5.6·호지급 원가율 10~15%, 1688 구매대행 실질 8%, 관세 8%(FTA 0~0.8%)·KC 비대상, 2026 리드줄 단체표준, 소자본 4단계 플로우."
+    },
+    {
       "id": "glow-moodlight-2026",
       "title": "VUUI Glow — 무드등 × 반려견 융합 라인 컨셉",
       "requested_at": "2026-07-20",

@@ -1,5 +1,9 @@
 # CHANGELOG — VUUI Archive (sourcing-bot)
 
+## 2026-07-25 — 보고서 추가 (콘텐츠, 버전 변동 없음)
+- Reports 탭에 "Walk 수입 소싱 가이드" 등록 (`docs/reports/import-sourcing-walk-2026.html`) — 원영·지영 조사, 노루군 직접 수입탐색용 참고서
+- 검색 키워드: 수입 소싱 가이드 1688 HS코드 관세 하네스 리드줄
+
 ## v5 — 2026-07-20
 - **VUUI Archive로 리브랜딩** — 타이틀 "VUUI 개발보드" → "VUUI Archive" (화면만; repo·워커 이름 sourcing-bot 유지, webhook 재등록 회피)
 - **탭 UI 추가**: [Sourcing] / [Reports] 세그먼트 탭 (애플 세그먼트 컨트롤 스타일)

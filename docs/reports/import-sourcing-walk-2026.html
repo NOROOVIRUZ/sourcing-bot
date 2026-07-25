@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- VUUI 보고서 템플릿 — 복사해서 {{...}} 자리만 채운다. 뼈대 재생성 금지 (코인 절약) -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walk 수입 소싱 가이드 — VUUI</title>
+<style>
+  :root{--warm:#FBF8F2;--ivory:#F6F1E8;--sand:#D8C7AE;--sage:#A8AD9B;--char:#2F2E2A}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:var(--warm);color:var(--char);line-height:1.7}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 24px}
+  header{border-bottom:2px solid var(--sand);padding-bottom:20px;margin-bottom:36px}
+  header .brand{font-size:13px;letter-spacing:3px;color:var(--sage);font-weight:700}
+  header h1{font-size:28px;margin-top:8px}
+  header .meta{font-size:13px;color:#8a857c;margin-top:6px}
+  h2{font-size:20px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--sage)}
+  h3{font-size:16px;margin:24px 0 8px}
+  p,li{font-size:15px}
+  ul,ol{padding-left:22px;margin:8px 0}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;background:#fff}
+  th{background:var(--ivory);text-align:left}
+  th,td{border:1px solid var(--sand);padding:9px 12px}
+  a{color:#7a7f6e}
+  .card{background:#fff;border:1px solid var(--sand);border-radius:10px;padding:18px 20px;margin:14px 0}
+  .tag{display:inline-block;background:var(--sage);color:#fff;font-size:12px;padding:2px 10px;border-radius:99px;margin-right:6px}
+  footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--sand);font-size:12px;color:#8a857c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">VUUI · More Connection. Less Noise.</div>
+    <h1>Walk 수입 소싱 가이드 — 탐색 지원 자료</h1>
+    <div class="meta">2026-07-25 · 작성: 장원영(시세)·이지영(수입 실무) · 취합: asuka</div>
+  </header>
+
+  <div class="card">
+    <span class="tag">용도</span> <b>노루군이 직접 수입제품을 탐색할 때 옆에 두는 참고서.</b>
+    제품 선정은 이 문서가 하지 않는다 — 도매가·마진 앵커, 수입 루트, 통관·규제만 정리했다.
+  </div>
+
+  <h2>1. 중국 도매가 시세 (Walk 카테고리)</h2>
+  <table>
+    <tr><th>제품 유형</th><th>도매가 (USD/개)</th><th>MOQ</th><th>비고</th></tr>
+    <tr><td>노풀(Y형) 하네스</td><td>$2.28~5.6 (드롭쉬핑 최저 $1.45)</td><td>10~100개/스타일</td><td>하네스+리드 세트 $2.28~5.25</td></tr>
+    <tr><td>하네스 전반 (패딩·전술형 포함)</td><td>$1.5~11</td><td>30~500</td><td>made-in-china 실측</td></tr>
+    <tr><td>로프/나일론/슬립 리드줄</td><td>$1.05~2.99</td><td>50~500</td><td></td></tr>
+    <tr><td>칼라+리드 세트</td><td>$0.50~8.90 (가죽 $3.50~8.90)</td><td>20~1,440</td><td></td></tr>
+    <tr><td>자동(리트랙터블) 리드줄</td><td>$2.25~5.50</td><td>500</td><td>MOQ 높음</td></tr>
+    <tr><td>배변봉투 홀더·트리트 파우치</td><td>콤보세트 $2~7</td><td>—</td><td>단품가 미확인</td></tr>
+  </table>
+  <ul>
+    <li>커스텀 공통 조건: 컬러·사이즈·로고(우븐/가죽 라벨)·패키지 커스텀 가능, 샘플 1~3일, 양산 15~25일. 소형 공장(Wedogy 등)은 MOQ 15~50개부터 OEM 수용</li>
+    <li>⚠️ 심화 필요: 1688 위안화 내수가 — 크롤링 차단으로 미확인. 사입대행 견적으로 확인 요</li>
+  </ul>
+
+  <h2>2. 국내 소매가 앵커 &amp; 마진 구조</h2>
+  <table>
+    <tr><th>포지션</th><th>가격대</th><th>근거</th></tr>
+    <tr><td>일반가</td><td>하네스·리드줄 19,900~49,000원 / 자동 리드줄 16,000~23,320원</td><td>무신사·G마켓 검색</td></tr>
+    <tr><td>러프웨어 (기능 프리미엄)</td><td>프론트레인지 하네스 68,000원 / 리드줄 36,000원</td><td>검색 스니펫</td></tr>
+    <tr><td>호지 (감성 프리미엄)</td><td>에센셜 하네스 39,000 / 새들 하네스 53,000 / 올인원 54,000 / 슬립 리쉬 38,000 / 핸즈프리 48,000 / 마틴게일 32,000원</td><td>hozi.co.kr 페이지 실측</td></tr>
+  </table>
+  <div class="card">
+    <b>마진 구조 (환율 1,400원 가정):</b> 하네스 도매 $3~5(약 4,200~7,000원) → 호지급 소매 39,000~54,000원이면 <b>제품원가율 10~15%</b>.
+    운송·관세·부가세·불량률 감안해도 감성 프리미엄 포지션은 구조 여유가 크다.
+    일반가(2만원대) 포지션은 원가율 20~30%로 얇아짐 → <b>3만원대 후반~5만원대 프리미엄 진입이 구조상 유리.</b>
+  </div>
+
+  <h2>3. 참고 — 제품 유형별 가격 매트릭스 (원영 조사분)</h2>
+  <p>선정용 아님. 탐색 시 가격 감 잡는 용도로만.</p>
+  <table>
+    <tr><th>#</th><th>제품 유형</th><th>예상 도매가</th><th>국내 소매가대</th><th>러프웨어~호지 축</th></tr>
+    <tr><td>1</td><td>Y형 노풀 하네스 (패딩)</td><td>$2.3~5.6</td><td>2~7만원 (호지 39~54k, 러프웨어 68k)</td><td>정중앙 — 기능 구조+감성 마감</td></tr>
+    <tr><td>2</td><td>로프 리드줄</td><td>$1.05~2.99</td><td>1.5~3.8만원 (러프웨어 36k)</td><td>호지 쪽</td></tr>
+    <tr><td>3</td><td>슬립 리쉬 (일체형)</td><td>$1.05~2.99</td><td>호지 38k 앵커</td><td>호지 쪽</td></tr>
+    <tr><td>4</td><td>올인원 하네스 (하네스+리드 일체)</td><td>세트 $2.28~5.25</td><td>호지 54k 앵커</td><td>호지 쪽 (최상위 감성)</td></tr>
+    <tr><td>5</td><td>마틴게일 칼라</td><td>$0.5~8.9 (가죽 $3.5+)</td><td>호지 32k 앵커</td><td>중간</td></tr>
+    <tr><td>6</td><td>핸즈프리(크로스바디) 리드줄</td><td>리드줄 대역 추정 ⚠️</td><td>호지 48k 앵커</td><td>러프웨어 쪽 (러닝·아웃도어)</td></tr>
+    <tr><td>7</td><td>배변봉투 디스펜서+트리트 파우치</td><td>콤보 $2~7</td><td>⚠️ 미포착</td><td>액세서리 공통</td></tr>
+    <tr><td>8</td><td>자동 리드줄</td><td>$2.25~5.50 (MOQ 500)</td><td>1.6~2.3만원</td><td>축 밖 (매스마켓)</td></tr>
+  </table>
+
+  <h2>4. 소싱 채널 비교 (지영 조사분)</h2>
+  <table>
+    <tr><th>채널</th><th>장점</th><th>단점</th><th>비용 감</th><th>초기 적합도</th></tr>
+    <tr><td><b>1688 직접</b></td><td>공장 도매가 최저, 반려용품 공장 밀집(이우·광저우권)</td><td>중국어 필수, 한국 직배 없음(배대지 필수), 수출서류 직접 처리, 분쟁 보호 약함</td><td>수수료 0%, 인프라 자체 구축 필요</td><td>△ (2회차 이후)</td></tr>
+    <tr><td><b>1688 구매대행</b></td><td>결제·검품·통관·배송 일괄, 한국어 소통, 학습비용 최소</td><td>수수료+환율 마진 이중 구조</td><td>표면 5%(3~10%) + 환전 마진 3~5% → 실질 약 8%</td><td><b>◎ 1순위</b></td></tr>
+    <tr><td><b>알리바바 (RFQ)</b></td><td>영어 소통, Trade Assurance 결제 보호, 복수 견적 수취 → OEM 전환 최적</td><td>수출용 가격이라 1688보다 단가 높음, 커스텀 MOQ 존재</td><td>구매자 수수료 무료 (단가 반영)</td><td>○ 견적 교차검증용</td></tr>
+    <tr><td><b>made-in-china</b></td><td>B2B 수출 플랫폼, 공급사 교차 확인</td><td>반려용품 풀이 알리바바보다 얇음</td><td>알리바바 유사</td><td>△ 비교 보조</td></tr>
+    <tr><td><b>국내 도매 (도매꾹 등)</b></td><td>수입 절차 전무, 1~10개 즉시 확보</td><td>범용품이라 OEM·브랜딩 불가, 마진 얇음</td><td>도매가가 수입원가보다 높음</td><td>○ 벤치마크·촬영 샘플용</td></tr>
+  </table>
+  <p><b>팁:</b> 대행은 "표면 수수료 %"만 보지 말고 <b>적용 환율</b>(매매기준율 대비 마진)을 반드시 확인 — CNY 기준율 216.68원일 때 대행 적용환율 222~227원 실측 사례.</p>
+
+  <h2>5. 통관·규제 (리쉬·하네스·칼라 기준)</h2>
+  <ul>
+    <li><b>HS코드 1순위: 4201.00</b> (동물용 마구류 — 목줄·리드·하네스 명시 포함, 재질 불문)</li>
+    <li><b>기본 관세 8%</b> + 부가세 10%. <b>한중FTA 협정세율 0~0.8% 추정</b> (⚠️ 스니펫 상충 — 유니패스/관세사 최종 확인 요). FTA 적용엔 원산지증명서(C/O) 필요, 단 <b>물품가 USD 700 이하는 C/O 면제</b> → 샘플 단계에 유용</li>
+    <li><b>KC 인증: 법정 대상 아님</b> (전기·어린이제품 아님). 동물검역도 비대상 (가죽 부자재 쓰면 별도 확인)</li>
+    <li><b>2026년 4월 리드줄·목줄·하네스 단체표준 최초 제정</b> (SPS G KOTITI-7698:2026, 자율) — "시중 절반 기준 미달" 보도와 함께 등장. <b>시험성적서 취득 시 소자본 브랜드의 강력한 차별화 무기</b></li>
+    <li><b>원산지표시 의무</b>: "Made in China" 라벨 견고 부착 필수 — 공장에 사전 요청</li>
+    <li>⚠️ 심화 필요: 금속 부자재(D링 도금) 안전기준준수 품목 해당 여부</li>
+  </ul>
+
+  <h2>6. 거래 조건 일반 수준</h2>
+  <table>
+    <tr><th>항목</th><th>재고품 (1688 기성)</th><th>OEM 커스텀 (로고 웨빙·자수)</th></tr>
+    <tr><td>MOQ</td><td>1~50개 단위 가능</td><td>통상 컬러·사이즈당 200~500개</td></tr>
+    <tr><td>샘플 비용</td><td>제품가 수준 (수천 원~2만원대)</td><td>제품가 2~5배 + 커스텀 준비비</td></tr>
+    <tr><td>생산 리드타임</td><td>출고 3~7일</td><td>15~30일</td></tr>
+    <tr><td>해운</td><td colspan="2">한중 페리(위해→인천 등) 선적 후 <b>익일 도착</b> — 통관 포함 체감 5~10일. 소량도 해운이 가성비 우위. LCL 일반 가이드 m³당 $22~50</td></tr>
+    <tr><td>항공/특송</td><td colspan="2">현지 입고 후 2일+지연 1~2일. 항공화물 $2.6~6.5/kg, 특송 $5~20/kg — 샘플 단계 전용</td></tr>
+  </table>
+
+  <h2>7. 소자본 첫 수입 4단계 플로우 (지영 추천)</h2>
+  <div class="card">
+    <p><b>0단계 — 스펙 확정</b> (0원, 1주): 웨빙 폭(15/20/25mm)·버클·D링·사이즈·컬러 문서화. 도매꾹 범용품 1~2개로 기준점. 1688 후보 공장 3~5곳 스크리닝</p>
+    <p><b>1단계 — 샘플 확보</b> (10~20만원, 2주): 구매대행으로 3~5개 공장 × 2~3종 재고 샘플 → 항공 배대지. USD 700 이하라 C/O 없이 통관 부담 최소</p>
+    <p><b>2단계 — 소량 테스트 사입</b> (50~150만원, 3~4주): 1~2개 공장 재고품 100~300개, 해운 배대지 + 정식통관 1회 경험. 스마트스토어 실판매 반응 측정</p>
+    <p><b>3단계 — 본 발주 OEM</b> (300만원~, 6~8주): 알리바바 RFQ로 견적 교차검증 → 1688 공장 커스텀 발주(SKU당 300~500개). <b>C/O 발급 계약 명시</b> + KOTITI 시험성적서 취득. 해운 LCL + 대행 검품 필수</p>
+  </div>
+
+  <h2>8. ⚠️ 심화 필요 종합</h2>
+  <ul>
+    <li>1688 위안화 실사입가 — 사입대행 견적으로 확인</li>
+    <li>한중FTA 4201.00의 2026년 잔여세율 (0% vs 0.8% 상충)</li>
+    <li>금속 부자재 안전기준준수 대상 여부 — 시험기관·관세사 확인 권장</li>
+    <li>중→한 LCL 실운임 (전용 페이지 403, 일반 가이드 수치만 확보)</li>
+    <li>대행별 실질 환율 마진 — 계약 전 실측</li>
+  </ul>
+
+  <h2>출처</h2>
+  <ul style="font-size:13px">
+    <li><a href="https://www.made-in-china.com/manufacturers/dog-collar-and-leash.html">made-in-china 칼라·리쉬 카테고리 (페이지 실측)</a></li>
+    <li><a href="https://hozi.co.kr">호지 공식몰 (페이지 실측)</a> · 알리바바 showroom 스니펫 · 무신사/G마켓 검색 스니펫 · <a href="https://wedogy.com/">Wedogy (스니펫)</a></li>
+    <li><a href="https://goport.kr/board/view/code/faq/codeNo/1553">goport — HS코드·FTA 세율</a> · <a href="https://www.flexport.com/data/hs-code/4201-saddlery-and-harness-for-any-animal-including-traces-leads-knee-pads-muzzles-saddle-cloths-saddle-bags-dog-coats-and-the-like-of-any-material/index.html">Flexport — HS 4201 정의</a></li>
+    <li><a href="https://v.daum.net/v/20260406122724199?f=p">다음뉴스 — K-리드줄 단체표준 첫 제정 (KOTITI-7698:2026)</a> · <a href="https://www.safetykorea.kr/policy/targetsSafetyCheck3">제품안전정보센터 — 안전확인 대상 목록</a></li>
+    <li><a href="https://www.duly.co.kr/guide/faq/purchase/how-1688-works">두리무역 — 1688 구매대행 절차</a> · <a href="https://super-label.com/blog/1688-purchase-agent-fees">슈퍼레이블 — 대행 수수료 복리 구조 (열람)</a> · <a href="https://goodgate.co.kr/1688-payment-agency-fee-guide/">굿게이트 — 결제대행 수수료</a></li>
+    <li><a href="https://goport.kr/board/view/code/faq/codeNo/20/pageNo/2">goport — 배송기간</a> · <a href="https://www.apexlink-shipping.com/ko/from-china-to/china-to-south-korea/">ApexLink — 중→한 운송 가이드</a> · <a href="http://www.dncorea.co.kr/Front/Introduction/DlvrMny.asp?gMnu1=217&amp;gMnu2=21702&amp;CTR_SEQ=1008">디앤코리아 — 페리 해운</a></li>
+  </ul>
+
+  <footer>VUUI Internal Report · 본 문서의 비교·분석 항목에는 출처 URL 첨부 필수 · v0.6</footer>
+</div>
+</body>
+</html>
