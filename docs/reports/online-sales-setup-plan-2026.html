@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!-- VUUI 보고서 템플릿 — 복사해서 {{...}} 자리만 채운다. 뼈대 재생성 금지 (코인 절약) -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>온라인 판매 세팅 & VUUI 전산 기획서 — VUUI</title>
+<style>
+  :root{--warm:#FBF8F2;--ivory:#F6F1E8;--sand:#D8C7AE;--sage:#A8AD9B;--char:#2F2E2A}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:var(--warm);color:var(--char);line-height:1.7}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 24px}
+  header{border-bottom:2px solid var(--sand);padding-bottom:20px;margin-bottom:36px}
+  header .brand{font-size:13px;letter-spacing:3px;color:var(--sage);font-weight:700}
+  header h1{font-size:28px;margin-top:8px}
+  header .meta{font-size:13px;color:#8a857c;margin-top:6px}
+  h2{font-size:20px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--sage)}
+  h3{font-size:16px;margin:24px 0 8px}
+  p,li{font-size:15px}
+  ul,ol{padding-left:22px;margin:8px 0}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;background:#fff}
+  th{background:var(--ivory);text-align:left}
+  th,td{border:1px solid var(--sand);padding:9px 12px}
+  a{color:#7a7f6e}
+  .card{background:#fff;border:1px solid var(--sand);border-radius:10px;padding:18px 20px;margin:14px 0}
+  .tag{display:inline-block;background:var(--sage);color:#fff;font-size:12px;padding:2px 10px;border-radius:99px;margin-right:6px}
+  pre{background:#fff;border:1px solid var(--sand);border-radius:10px;padding:14px 16px;font-size:13px;overflow-x:auto;margin:12px 0;line-height:1.6}
+  footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--sand);font-size:12px;color:#8a857c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">VUUI · More Connection. Less Noise.</div>
+    <h1>온라인 판매 세팅 &amp; VUUI 전산 기획서</h1>
+    <div class="meta">2026-07-25 · 작성: 예나(기획)·원영(수수료 조사)·지영(관세 확정) · 취합: asuka · v1</div>
+  </header>
+
+  <div class="card">
+    <span class="tag">용도</span> <b>구현 전 승인용 기획서.</b> ① 판매가 계산기 ② 재고 장부 ③ Supabase+Vercel 전산 기본 틀 ④ 회사 조직(실제 경영진 + AI 부서) — CEO 승인 후 단계별 구현에 들어간다.
+  </div>
+
+  <h2>1. 확정 수치 — 관세 &amp; 마켓 수수료 (조사 완료분)</h2>
+
+  <h3>관세 (HS 4201.00 — 개 목줄·리드·하네스, 지영 확정)</h3>
+  <table>
+    <tr><th>시나리오</th><th>관세</th><th>부가세</th></tr>
+    <tr><td>중국 측 원산지증명서(C/O) 구비 <b>또는</b> 물품가 USD 700 이하(C/O 면제)</td><td><b>0%</b></td><td>10% (사업자 매입세액 공제 가능)</td></tr>
+    <tr><td>C/O 없음</td><td><b>8%</b> (기본세율)</td><td>10% (동일)</td></tr>
+  </table>
+  <ul>
+    <li>이전 자료의 "0.8%"는 <b>2023년 수치</b>였음 — 한중FTA 양허유형 10(연 0.8%p 균등 인하)으로 <b>2024-01-01 철폐 완료</b>. 2026년 현재 C/O만 있으면 관세 0원</li>
+    <li>실무 결론: <b>본 발주 때 공장에 C/O 발급을 계약 조건으로 명시</b>하면 관세 전액 절감. 샘플 단계(USD 700 이하)는 C/O 없이도 0%</li>
+    <li>최종 게이트: 발주 직전 유니패스(unipass.customs.go.kr) 세율 조회 1분 확인 권장</li>
+  </ul>
+
+  <h3>마켓 수수료 (원영 확정, 2026-07 기준)</h3>
+  <table>
+    <tr><th>채널</th><th>명목 수수료</th><th>구조</th></tr>
+    <tr><td>쿠팡 판매자배송 (마켓플레이스)</td><td><b>10.8%</b> (반려/애완용품)</td><td>별도 결제수수료 없음 — 배송·CS는 셀러 부담</td></tr>
+    <tr><td>네이버 스마트스토어</td><td><b>실질 약 5.6~5.7%</b></td><td>주문관리 3.63~3.74%(결제수단별) + 매출연동 2%</td></tr>
+    <tr><td>자사몰 (카페24)</td><td>PG 약 3.0~3.5%</td><td>판매수수료 없음, 대신 트래픽을 직접 만들어야 함</td></tr>
+  </table>
+  <p>전략 인사이트: 동일 판매가면 스마트스토어 마진이 쿠팡 대비 <b>판매가의 약 5%p 높다</b>. 노출·물량은 쿠팡, 마진 방어는 스마트스토어 — 광고비 배분 판단의 출발점.</p>
+
+  <h3>⚠️ 쿠팡 "입점수수료 비싸다"의 정체 — 모델별 실질 부담 (CEO 지적 반영)</h3>
+  <p>CEO가 말한 30%급 부담은 틀린 게 아니라 <b>다른 모델</b> 얘기다. 쿠팡은 파는 방식이 3가지고 실질 부담이 완전히 다르다:</p>
+  <table>
+    <tr><th>모델</th><th>부담 구조</th><th>실질 부담 (2만원 하네스 기준)</th></tr>
+    <tr><td>판매자배송</td><td>판매수수료 10.8%만, 배송은 셀러 직접</td><td>10.8% + 자체 택배비</td></tr>
+    <tr><td>로켓그로스 (쿠팡 창고 위탁)</td><td>10.8% + 입출고·배송요금(건당 정액, 사이즈·무게 6단계) + 보관비</td><td><b>프로모션 약 21% / 정상가 약 30%</b> (극소형 물류 건당 1,950~3,850원)</td></tr>
+    <tr><td>로켓배송 입점 (납품)</td><td>쿠팡이 매입 — 공급가 협상으로 마진 확보</td><td><b>약 40%+</b> (통용치 — 상품별 협상)</td></tr>
+  </table>
+  <ul>
+    <li><b>CEO 어림 "30%급"은 로켓그로스 정상가·로켓배송 기준으로 대체로 맞다.</b> 판매자배송(10.8%) 기준으로만 과대 — 모델 구분이 핵심</li>
+    <li>로켓그로스 프로모션 단가는 <b>2027-01-31 종료</b> — 계산기 프리셋에 프로모션/정상가 토글 필수</li>
+    <li>⚠️ 심화 필요: 극소형 vs 소형 커트라인 치수(건당 ~900원 차이) — 쿠팡 WING 요금표에서 하네스 실측 치수로 확정</li>
+  </ul>
+  <p>→ 계산기는 <b>%가 아니라 "% + 건당 정액" 구조의 모델별 프리셋</b>으로 설계한다 (3장 스펙에 반영됨).</p>
+
+  <h2>2. 온라인 판매 세팅 체크리스트 (예나)</h2>
+
+  <h3>행정 절차 — 이 순서대로</h3>
+  <table>
+    <tr><th>#</th><th>항목</th><th>구분</th><th>포인트</th></tr>
+    <tr><td>1</td><td>사업자등록 (개인)</td><td>필수</td><td><b>과세유형(일반/간이) 선택이 계산기 수식을 가름</b> — 가장 먼저 결정</td></tr>
+    <tr><td>2</td><td>사업용 통장</td><td>필수</td><td>정산 수령·비용 지출 분리</td></tr>
+    <tr><td>3</td><td>스마트스토어 가입 → 구매안전서비스 이용확인증</td><td>필수</td><td>통신판매업 신고의 첨부 서류 — <b>신고보다 스토어 가입이 먼저</b></td></tr>
+    <tr><td>4</td><td>통신판매업 신고</td><td>필수</td><td>전자상거래법 의무</td></tr>
+    <tr><td>5</td><td>사업자 통관고유부호 (유니패스)</td><td>필수</td><td><b>판매 목적 수입은 개인통관부호 사용 불가</b> — 어기면 관세포탈 리스크</td></tr>
+    <tr><td>6</td><td>홈택스 등록 + 간편장부</td><td>권장</td><td>부가세 신고 대비</td></tr>
+    <tr><td>7</td><td>사업용 카드 등록</td><td>권장</td><td>매입세액 공제 자동화</td></tr>
+  </table>
+
+  <h3>상품·법규 (발주 전)</h3>
+  <ul>
+    <li><b>[필수]</b> 무브랜드 제품 선별 — 1688 제품의 타사 로고·캐릭터는 통관 압류 + 판매중단 직결</li>
+    <li><b>[필수]</b> 품질표시(재질·취급주의) 의무 여부 품목별 확인 — KC 인증은 비대상 확정</li>
+    <li>[권장] VUUI 상표 출원 — 스토어 브랜드 등록·위조품 대응 기반</li>
+  </ul>
+
+  <h3>운영 도구</h3>
+  <ul>
+    <li><b>[필수]</b> 쿠팡 윙 입점 + 스마트스토어 개설 / 판매가 계산기 / 재고 장부 / 상품 사진·상세페이지 / 포장재 / 택배 체계 (초기: 편의점·방문 접수 → 물량 늘면 CJ 계약) / CS 알림 (톡톡·쿠팡 문의)</li>
+    <li>[권장] 정산 캘린더 (쿠팡·네이버 정산 주기 상이 — 현금흐름 관리) / 리뷰 이벤트 방침</li>
+  </ul>
+
+  <h2>3. 판매가 계산기 스펙 (예나)</h2>
+
+  <h3>구조 원칙</h3>
+  <ul>
+    <li>수수료·관세·환율은 코드에 안 박고 <b>프리셋 데이터</b>로 — 수치 바뀌면 프리셋만 교체</li>
+    <li>과세유형 토글(일반/간이)이 수식을 가름 — 최상단 입력</li>
+    <li>마진율 정의는 <b>판매가 대비</b>로 통일 (원가 대비와 혼용 금지, UI에 명시)</li>
+    <li>마켓 프리셋은 <b>% + 건당 정액</b> 복합 구조 (로켓그로스 대응)</li>
+  </ul>
+
+  <h3>입력 → 출력</h3>
+  <table>
+    <tr><th>입력 (원가)</th><th>입력 (판매)</th><th>출력</th></tr>
+    <tr><td>도매가(CNY→자동 환산), 대행 수수료율, 국제운송(총액→개당 배분), 관세율(C/O 여부), 택배비, 포장재, 기타, 불량률</td><td>마켓 프리셋(수수료% + 건당 정액), 광고비율, 목표 마진율 또는 판매가, 월 고정비, 초기 투자금</td><td>권장 판매가(₩x,900 스냅), 개당 마진액·마진율, 손익분기 판매량(월 고정비 기준 + 투자금 회수 기준), <b>마켓별 비교 테이블</b></td></tr>
+  </table>
+
+  <h3>핵심 공식 (일반과세자 기준)</h3>
+  <pre>원가(landed) = 도매가 + 대행수수료 + 국제운송(개당) + 관세 + 포장재 + 택배비 + 기타  ×(1+불량률)
+  · 수입 부가세는 매입공제로 돌려받으므로 원가 아님 (단, 현금은 나가니 초기 투자금엔 포함)
+
+마진 = 공급가액(판매가÷1.1) − landed − 마켓수수료 − 건당정액(풀필먼트) − 광고비(순액)
+역산 판매가 = landed ÷ (k − 목표마진율)   ← k = 수수료·광고 구조로 정해지는 계수
+손익분기: 월 고정비 ÷ 개당마진 (월간) · 초기 투자금 ÷ 개당마진 (회수)</pre>
+
+  <div class="card">
+    <b>예시 계산 (가정치 — 실측 아님):</b> 하네스 도매 $4(≈5,600원), 대행 8%, 국제운송 500원/개, C/O 있어 관세 0%, 포장 300원, 택배 3,000원 → <b>landed ≈ 9,850원</b><br>
+    판매가 39,000원(호지 에센셜 앵커), 광고비 10% 가정 시 —<br>
+    · 스마트스토어(5.65%): 개당 마진 <b>약 19,900원 (마진율 51%)</b><br>
+    · 쿠팡 판매자배송(10.8%): 개당 마진 <b>약 17,800원 (마진율 46%)</b><br>
+    → 300개 사입(투자 약 300만원) 기준 손익분기 <b>약 150~170개</b>. 구조가 나온다.
+  </div>
+
+  <h2>4. 재고 관리 장부 스펙 (예나 — 1인 운영 기준)</h2>
+  <ul>
+    <li><b>시트 3장 구조</b>: ① 상품 마스터(SKU: <code>VW-HN-RD-M</code> 식, 리오더 임계수량) ② 입고 기록(개당 원가 = 계산기 landed 자동 연동) ③ 출고 기록(<b>일 단위 마감</b> — 건별 입력 금지, 하루 5분)</li>
+    <li>자동 계산: 현재고 = Σ입고−Σ출고 / 평균원가 = 이동평균 / 재고자산 = 현재고×평균원가</li>
+    <li>주 1회 실물 카운트 대조, 현재고 ≤ 임계치 → 재발주 알림</li>
+    <li><b>과설계 방지 명시</b>: 로트·바코드·API 자동수집·다중권한 전부 제외 (월 수백 건 전까지 불필요)</li>
+  </ul>
+
+  <h2>5. VUUI 전산 — Supabase + Vercel (CEO 확정 스택)</h2>
+  <p>noroo-archive에서 검증한 Next.js+Supabase+Vercel 무료 티어 패턴 그대로 재사용. 인증은 Supabase Auth 1계정 + RLS(내 행만 접근) — URL이 새도 데이터는 안 열림. <b>스키마는 지금 전부 확정, 화면은 3단계 구현.</b></p>
+
+  <h3>DB 기본 틀 — 테이블 8개</h3>
+  <table>
+    <tr><th>테이블</th><th>역할</th><th>핵심</th></tr>
+    <tr><td>products</td><td>SKU 마스터</td><td>sku, 카테고리·옵션, 리오더 임계치, 평균원가 스냅샷</td></tr>
+    <tr><td>cost_presets</td><td>수수료·세율 프리셋</td><td><b>조사 확정값의 주입처</b> — 수치 변경 = 행 수정</td></tr>
+    <tr><td>cost_simulations</td><td>계산기 시나리오 저장</td><td>후보 제품 단계부터 저장 (마스터 등록 전 OK), landed 스냅샷</td></tr>
+    <tr><td>inbound / outbound</td><td>입고 / 출고</td><td>입고 원가 = 시뮬레이션 landed 복사 (이중 입력 금지)</td></tr>
+    <tr><td>sales</td><td>판매 실적 (일 집계)</td><td>입력 시 출고(type=sale) 자동 생성</td></tr>
+    <tr><td>ad_spend</td><td>광고비 (마케팅비)</td><td>날짜·채널·캠페인·금액</td></tr>
+    <tr><td>settlements</td><td>정산</td><td>채널·기간·입금일·수수료 — sales 집계와 대사(검증)</td></tr>
+  </table>
+  <p>파생은 뷰로: 현재고, 재고자산, <b>월 손익(매출−원가−수수료−광고비) + BEP 진행률</b> → 이게 나중에 대시보드 메인 화면이 된다.</p>
+
+  <h3>구현 3단계</h3>
+  <table>
+    <tr><th>단계</th><th>내용</th><th>완료 기준</th></tr>
+    <tr><td><b>1단계 (즉시)</b></td><td>부트스트랩 + 8테이블 마이그레이션 + <b>계산기 화면</b> (프리셋 시드, 시뮬레이션 저장, 마켓 비교)</td><td>배포 URL에서 역산 판매가가 나온다</td></tr>
+    <tr><td>2단계 (첫 발주 후)</td><td>재고 화면 (입고 자동 연동·현재고·재고자산) + CSV 내보내기</td><td>입고 1건에 평균원가 자동 갱신</td></tr>
+    <tr><td>3단계 (판매 개시 후)</td><td>판매·광고비·정산 화면 + 월 손익 대시보드</td><td>정산서와 대사가 맞는다</td></tr>
+  </table>
+
+  <h2>6. VUUI 회사 시스템 — 조직 (예나)</h2>
+
+  <h3>이원 구조: 경영진(실제) / 실무 부서(AI)</h3>
+  <pre>[경영진 — 실제 인물]
+  사장   김소연 — 투자자 성격 (명의 대표 가능성)
+  사장2  noroo — 실질 운영 총괄 (모든 실권)
+  이사1  지영 — 물류·수입 담당
+        │ 지시·승인
+  [코디네이터] asuka — 지시 분해·병렬 배분·취합
+        │
+  [AI 실무 부서]
+  예나(기획실) · 윤정(디자인) · 원영(리서치) · 유권(마케팅·CS 겸임) · 지영(AI)(물류지원·문서)</pre>
+  <ul>
+    <li>원칙: <b>AI 팀은 산출물, 결정은 항상 경영진.</b> 보고는 asuka 경유 일원화</li>
+    <li>동명 충돌: 이사 지영(실제)과 구분해 AI 쪽은 모든 문서에서 <b>"지영(AI)"</b> 표기 — 지영(AI)는 이사 지영의 물류·수입 실무 보좌로 매핑</li>
+    <li><b>명의 유의점</b>: 동생 단독 명의 + 실질 운영자 별도 구조는 '명의대여' 세법·금융 리스크 — 실질대로 <b>공동사업자 등록이 안전</b>. 명의 확정 시 통신판매업 신고·통관부호·정산계좌·통장 전부 그 명의로 통일 (행정 절차 1번의 전제)</li>
+  </ul>
+
+  <h3>AI 조직 확장 — "산출물이 생길 때만 부서를 만든다"</h3>
+  <table>
+    <tr><th>부서</th><th>결정</th><th>담당 산출물</th></tr>
+    <tr><td><b>재무 (신설 확정)</b></td><td>스펙은 지금, <b>가동은 판매 개시와 동시</b> (데이터 없는 유령부서 방지)</td><td>정산 대사, 월 손익 리포트(BEP 진행률), 세무 캘린더(부가세 기한), 원가 검산(환율·관세 최신성)</td></tr>
+    <tr><td>CS</td><td>보류 — 유권 겸임</td><td>월 주문 수백 건에서 분리</td></tr>
+    <tr><td>소싱/무역</td><td>보류 — 노루군 직접 + sourcing-bot</td><td>재발주가 반복 패턴 되면 에이전트화</td></tr>
+  </table>
+
+  <h3>부서 × 기존 자산 매핑</h3>
+  <table>
+    <tr><th>부서</th><th>무기 (스킬·깃저장소 자산)</th></tr>
+    <tr><td>예나 (기획)</td><td>/기획 원스탑 기획툴, kdata-cli(뉴스·법령), market-search</td></tr>
+    <tr><td>원영 (리서치)</td><td>마켓 검색 스킬 7종(쿠팡·네이버·다나와·다이소·올리브영·컬리·오늘의집), market-search, sourcing-bot, kdata-cli</td></tr>
+    <tr><td>윤정 (디자인)</td><td>Apple HIG 디자인 시스템, baoyu-design(상세페이지·PPT)</td></tr>
+    <tr><td>유권 (마케팅+CS)</td><td>마켓 검색 스킬(경쟁가 모니터링), /기획 툴 보고서</td></tr>
+    <tr><td>지영(AI) (물류지원)</td><td>sourcing-bot, 수입 소싱 가이드(research/data 적립분), 통관 체크리스트(신규)</td></tr>
+    <tr><td>재무 (신설)</td><td><b>VUUI 전산 DB</b>(settlements·sales·ad_spend), kdata-cli(세법), 주간 브리핑 루틴 패턴 재사용(월 손익 TG 발송)</td></tr>
+  </table>
+
+  <h2>7. CEO 결정 필요 항목</h2>
+  <ol>
+    <li><b>사업자 명의 구조</b> — 동생 단독 대표 vs noroo 공동사업자 등록 (예나 권고: 공동사업자 — 명의대여 리스크 회피)</li>
+    <li><b>과세유형</b> — 일반과세자(수입 VAT 공제 가능, 신고 연 2회) vs 간이과세자(공제 불가, 신고 연 1회). 수입업은 매입 VAT가 커서 <b>일반과세가 통상 유리</b> — 사업자등록 때 확정</li>
+    <li><b>쿠팡 진입 모델</b> — 판매자배송(수수료 낮음, 배송 직접) vs 로켓그로스(부담 크지만 로켓 배지) — 계산기 1단계 완성 후 숫자 보고 결정 권장</li>
+    <li>재무 에이전트 이름 컨펌 (예나 제안: 하은)</li>
+  </ol>
+
+  <h2>8. 다음 단계</h2>
+  <ol>
+    <li>이 기획서 승인 → <b>전산 1단계 착수</b>: Supabase 프로젝트 생성(노루군 계정) + 8테이블 마이그레이션 + 계산기 화면 → Vercel 배포</li>
+    <li>노루군은 그동안 1688에서 제품 탐색 계속 — 후보 생기면 계산기에 도매가만 넣으면 마진 즉답</li>
+    <li>첫 발주 확정 → 2단계(재고), 판매 개시 → 3단계(정산·손익) + 재무 에이전트 가동</li>
+  </ol>
+
+  <h2>출처</h2>
+  <ul style="font-size:13px">
+    <li>관세: <a href="https://www.fta.go.kr/webmodule/common/download.jsp?boardid=48&amp;tablename=type_fta_region&amp;seqno=064fd1013fb0fba06d04800d&amp;fileseq=066fcafeb027014fbbfc1014">fta.go.kr 한중FTA 원산지 규정·관세율 PDF (원문 분석)</a> · <a href="https://goport.kr/board/view/code/faq/codeNo/1553">goport FAQ</a> · <a href="https://unipass.customs.go.kr/clip/index.do">유니패스 세율 조회</a></li>
+    <li>수수료: <a href="https://cloud.mkt.coupang.com/Fee-Table">쿠팡 공식 수수료표</a> · <a href="https://www.windly.cc/blog/naver-smartstore-fees">스마트스토어 수수료 정리</a> · <a href="https://ssjum.com/marketplace-naver.html">결제수단별 수수료표</a> · <a href="https://www.percenty.co.kr/blog/rocket-growth-fee-revision-key-details-sellers-need-to-know">로켓그로스 요금 개편</a> · <a href="https://allra.co.kr/blogs/254">로켓그로스 비용 정리</a></li>
+    <li>택배: <a href="https://www.cjlogistics.com/ko/utility/parcel-price">CJ대한통운 운임조회</a> · <a href="https://allra.co.kr/blogs/110">계약택배 안내</a></li>
+  </ul>
+
+  <footer>VUUI Internal Report · 본 문서의 비교·분석 항목에는 출처 URL 첨부 필수 · v0.7</footer>
+</div>
+</body>
+</html>

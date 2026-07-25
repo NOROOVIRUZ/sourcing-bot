@@ -2,6 +2,16 @@
   "version": 1,
   "reports": [
     {
+      "id": "online-sales-setup-2026",
+      "title": "온라인 판매 세팅 & VUUI 전산 기획서",
+      "requested_at": "2026-07-25",
+      "created_at": "2026-07-25",
+      "file": "./reports/online-sales-setup-plan-2026.html",
+      "author": "예나·원영·지영 (asuka 취합)",
+      "tags": ["기획", "판매가계산기", "Supabase 전산", "조직", "수수료·관세 확정"],
+      "summary": "관세 확정(C/O 시 0%), 쿠팡 모델별 실질 부담(10.8%/21~30%/40%+), 계산기·장부 스펙, Supabase 8테이블 전산 틀, 경영진 3인+AI 부서 조직, 재무 에이전트 신설안."
+    },
+    {
       "id": "import-sourcing-walk-2026",
       "title": "Walk 수입 소싱 가이드 — 탐색 지원 자료",
       "requested_at": "2026-07-25",
