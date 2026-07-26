@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-26T01:10:35.775Z",
+  "updated_at": "2026-07-26T01:42:15.360Z",
   "items": [
+    {
+      "id": "sound-effects-bbcrewind-co-uk-ms14ureo",
+      "url": "https://sound-effects.bbcrewind.co.uk/",
+      "domain": "sound-effects.bbcrewind.co.uk",
+      "company": "BBC Rewind - Sound Effects",
+      "desc_ko": "BBC Sound Effects",
+      "category": "미분류",
+      "confidence": 0,
+      "classified_by": "manual",
+      "saved_at": "2026-07-26T01:42:15.360Z",
+      "added_by": "telegram:8176674830",
+      "notes": null
+    },
     {
       "id": "localhost-ms13q1of",
       "url": "http://localhost:8791/os/index.html",
