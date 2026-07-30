@@ -1,5 +1,11 @@
 # CHANGELOG — VUUI Archive (sourcing-bot)
 
+
+## v5.01 — 2026-07-30
+
+- 검색엔진 색인 차단(noindex 메타) 적용 — docs/index.html + reports/ 보고서 HTML 3건 전부 `<head>` 최상단에 `<meta name="robots" content="noindex, nofollow">` 삽입 (검색 노출 방지)
+- 푸터 버전 표기 v5 → v5.01
+
 ## 2026-07-25 — 보고서 추가 2건째 (콘텐츠, 버전 변동 없음)
 - Reports 탭에 "온라인 판매 세팅 & VUUI 전산 기획서" 등록, 수입 소싱 가이드는 관세 확정(FTA 0%) 반영본으로 갱신
 - 검색 키워드: 판매가 계산기 전산 Supabase 조직 수수료 로켓그로스 관세 확정
