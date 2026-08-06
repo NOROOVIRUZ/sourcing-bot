@@ -1,7 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-07-26T01:42:15.360Z",
+  "updated_at": "2026-08-06T13:56:19.554Z",
   "items": [
+    {
+      "id": "www-alibaba-com-mshkx5gi",
+      "url": "https://www.alibaba.com/product-detail/Kingtale-Dog-Collar-with-Buckle-Adjustable_1601116217045.html?spm=a2700.image-text-search.normal_offer.d_image.527267afOjrnB8&priceId=e362f722fe9d48f1bc4591107828ac47",
+      "domain": "www.alibaba.com",
+      "company": "Kingtale Dog Collar with Buckle Adjustable",
+      "desc_ko": "Kingtale Dog Collar with Buckle Adjustable (URL 기반 추정)",
+      "category": "애견",
+      "confidence": 0.4,
+      "classified_by": "manual",
+      "saved_at": "2026-08-06T13:56:19.554Z",
+      "added_by": "telegram:8176674830",
+      "notes": null
+    },
     {
       "id": "sound-effects-bbcrewind-co-uk-ms14ureo",
       "url": "https://sound-effects.bbcrewind.co.uk/",
